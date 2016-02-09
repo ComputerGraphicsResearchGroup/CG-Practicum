@@ -16,7 +16,7 @@ EXECUTABLENAME = cgproject.jar
 ENTRYPOINT = main.Renderer
 						
 # specify the packages where the code can be found
-PACKAGES = camera gui main math sampling shape
+PACKAGES = camera film gui main math sampling shape
 
 ################################################################################
 # Only the code above this line has to be edited if more classes are added     #
@@ -44,12 +44,12 @@ all: clean classes jar
 
 classes: SOURCES := $(foreach dir,$(PACKAGES),$(wildcard $(SOURCEDIR)/$(dir)/*.java))
 classes:
-	@echo -e "\nsearching .java files from the following packages:"
-	@echo -e "$(foreach package,$(PACKAGES),\n\t$(package))"
-	@echo -e "\ncompiling the following .java classes:"
-	@echo -e "$(foreach java,$(SOURCES),\n\t$(java))"
+	$(info searching .java files from the following packages:)
+	$(foreach package,$(PACKAGES),$(info $  $  - $(package)))
+	$(info compiling the following .java classes:)
+	$(foreach java,$(SOURCES),$(info $  $  - $(java)))
 	@$(JAVAC) $(JFLAGS) $(SOURCES)
-	@echo -e "\nfinished compilation"
+	$(info finished compilation)
 	
 #############################################################################
 # Creates an executable JAR file from the classes in the SOURCEDIR with the #
@@ -57,9 +57,9 @@ classes:
 #############################################################################
 
 jar:
-	@echo -e "\nbuilding $(EXECUTABLENAME)"
+	$(info building $(EXECUTABLENAME))
 	@$(JAR) -cfe $(EXECUTABLENAME) $(ENTRYPOINT) -C $(SOURCEDIR)/ .
-	@echo -e "finished building $(EXECUTABLENAME)"
+	$(info finished building $(EXECUTABLENAME))
 	
 ##########################################
 # removes all the generated .class files #
@@ -67,8 +67,8 @@ jar:
 
 cleanclasses: CLASSFILES := $(foreach filename,$(foreach dir,$(PACKAGES),$(wildcard $(SOURCEDIR)/$(dir)/*.class)),$(filename))
 cleanclasses:
-	@echo -e "\nremoving the following .class files:"
-	@echo -e $(foreach filename,${CLASSFILES},'\n\t$(filename)')
+	$(info removing the following .class files:)
+	$(foreach filename, ${CLASSFILES}, $(info $  $  - $(filename)))
 	@$(foreach filename,${CLASSFILES},rm -f '$(filename)')
 	
 ################################################

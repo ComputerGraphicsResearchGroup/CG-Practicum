@@ -1,5 +1,6 @@
 package sampling;
 
+import math.Ray;
 import camera.Camera;
 
 /**
@@ -7,7 +8,7 @@ import camera.Camera;
  * {@link Ray}s.
  * 
  * @author Niels Billen
- * @version 1.0
+ * @version 0.2
  */
 public class Sample {
 	/**
@@ -25,9 +26,13 @@ public class Sample {
 	 * of the image.
 	 * 
 	 * @param x
-	 *            x coordinate of the sample in image space.
+	 *            x coordinate of the sample in image space (between 0
+	 *            (inclusive) and the horizontal resolution of the image
+	 *            (exclusive))
 	 * @param y
-	 *            y coordinate of the sample in image space.
+	 *            y coordinate of the sample in image space (between 0
+	 *            (inclusive) and the vertical resolution of the image
+	 *            (exclusive))
 	 */
 	public Sample(double x, double y) {
 		this.x = x;

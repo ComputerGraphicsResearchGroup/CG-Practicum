@@ -7,7 +7,7 @@ import java.util.Locale;
  * Vector implementation in three dimensions.
  * 
  * @author Niels Billen
- * @version 1.0
+ * @version 0.2
  */
 public class Vector implements Cloneable, Comparable<Vector> {
 	/**
@@ -295,7 +295,7 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	 * 
 	 * @return this {@link Vector} as a {@link Point}.
 	 */
-	public Point toPoint3D() {
+	public Point toPoint() {
 		return new Point(x, y, z);
 	}
 

@@ -243,7 +243,7 @@ public class Point implements Cloneable, Comparable<Point> {
 	 * 
 	 * @return this {@link Point} as a {@link Vector}.
 	 */
-	public Vector toVector3D() {
+	public Vector toVector() {
 		return new Vector(x, y, z);
 	}
 

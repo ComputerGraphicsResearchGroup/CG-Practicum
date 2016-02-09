@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * character to return to the head of the current output line.
  * 
  * @author Niels Billen
- * @version 1.0
+ * @version 0.2
  */
 public class ProgressReporter {
 	private final String title;

@@ -4,7 +4,7 @@ package math;
  * Represents a {@link Transformation} to transform three dimensional objects.
  * 
  * @author Niels Billen
- * @version 1.0
+ * @version 0.2
  */
 public class Transformation implements Cloneable {
 	private final Matrix matrix;
@@ -196,16 +196,16 @@ public class Transformation implements Cloneable {
 	 *            the z translation for this {@link Transformation}.
 	 * @return a new translation {@link Transformation}.
 	 */
-	public static Transformation createTranslation(double x, double y, double z) {
+	public static Transformation translate(double x, double y, double z) {
 		// @formatter:off
-		Matrix transformation = new Matrix(		1,	0,	0,	x,
-												0,	1,	0,	y,
-												0,	0,	1,	z,
-												0,	0,	0,	1);
-		Matrix inverse = new Matrix(	1,	0,	0,	-x,
-										0,	1,	0,	-y,
-										0,	0,	1,	-z,
-										0,	0,	0,	1);
+		Matrix transformation = new Matrix(	1,	0,	0,	x,
+											0,	1,	0,	y,
+											0,	0,	1,	z,
+											0,	0,	0,	1);
+		Matrix inverse = new Matrix(1,	0,	0,	-x,
+									0,	1,	0,	-y,
+									0,	0,	1,	-z,
+									0,	0,	0,	1);
 		// @formatter:on
 		return new Transformation(transformation, inverse);
 	}
@@ -222,16 +222,16 @@ public class Transformation implements Cloneable {
 	 * @return a new {@link Transformation} which scales three dimensional
 	 *         objects.
 	 */
-	public static Transformation createScale(double x, double y, double z) {
+	public static Transformation scale(double x, double y, double z) {
 		// @formatter:off
-		Matrix transformation = new Matrix(		x,	0,	0,	0,
-												0,	y,	0,	0,
-												0,	0,	z,	0,
-												0,	0,	0,	1);
-		Matrix inverse = new Matrix(	1/x,	0,		0,		0,
-										0,		1/y,	0,		0,
-										0,		0,		1/z,	0,
-										0,		0,		0,		1);
+		Matrix transformation = new Matrix(	x,	0,	0,	0,
+											0,	y,	0,	0,
+											0,	0,	z,	0,
+											0,	0,	0,	1);
+		Matrix inverse = new Matrix(1/x,	0,		0,		0,
+									0,		1/y,	0,		0,
+									0,		0,		1/z,	0,
+									0,		0,		0,		1);
 		// @formatter:on
 		return new Transformation(transformation, inverse);
 	}
@@ -244,7 +244,7 @@ public class Transformation implements Cloneable {
 	 *            the angle to rotate about (in degrees).
 	 * @return a new rotation {@link Transformation} about the x axis.
 	 */
-	public static Transformation createRotationX(double angle) {
+	public static Transformation rotateX(double angle) {
 		double rad = Math.toRadians(angle);
 		double sin = Math.sin(rad);
 		double cos = Math.cos(rad);
@@ -267,7 +267,7 @@ public class Transformation implements Cloneable {
 	 *            the angle to rotate about (in degrees).
 	 * @return a new rotation {@link Transformation} about the y axis.
 	 */
-	public static Transformation createRotationY(double angle) {
+	public static Transformation rotateY(double angle) {
 		double rad = Math.toRadians(angle);
 		double sin = Math.sin(rad);
 		double cos = Math.cos(rad);
@@ -290,7 +290,7 @@ public class Transformation implements Cloneable {
 	 *            the angle to rotate about (in degrees).
 	 * @return a new rotation {@link Transformation} about the z axis.
 	 */
-	public static Transformation createRotationZ(double angle) {
+	public static Transformation rotateZ(double angle) {
 		double rad = Math.toRadians(angle);
 		double sin = Math.sin(rad);
 		double cos = Math.cos(rad);
@@ -322,7 +322,7 @@ public class Transformation implements Cloneable {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuilder("[Transformation3D]\n").append(
+		return new StringBuilder("[").append(getClass().getName()+"]\n").append(
 				matrix.toString()).toString();
 	}
 }

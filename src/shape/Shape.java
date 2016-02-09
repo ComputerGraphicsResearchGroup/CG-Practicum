@@ -6,7 +6,7 @@ import math.Ray;
  * Interface which should be implemented by all {@link Shape}s.
  * 
  * @author Niels Billen
- * @version 1.0
+ * @version 0.2
  */
 public interface Shape {
 	/**
@@ -14,7 +14,7 @@ public interface Shape {
 	 * False when the given ray is null.
 	 * 
 	 * @param ray
-	 *            the ray to intersect with.
+	 *            the {@link Ray} to intersect with.
 	 * @return true when the given {@link Ray} intersects this {@link Shape}.
 	 */
 	public boolean intersect(Ray ray);

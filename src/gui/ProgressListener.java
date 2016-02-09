@@ -5,7 +5,7 @@ package gui;
  * computation task.
  * 
  * @author Niels Billen
- * @version 1.0
+ * @version 0.2
  */
 public interface ProgressListener {
 	/**
