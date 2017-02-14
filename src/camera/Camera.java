@@ -4,20 +4,21 @@ import math.Ray;
 import sampling.Sample;
 
 /**
- * Interface which all {@link Camera} subclasses should implement.
+ * An interface which allows the generation of rays in a three-dimensional
+ * space, corresponding to a sample in a two-dimensional image.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
 public interface Camera {
 	/**
-	 * Generates a new {@link Ray} from the given {@link Sample}.
+	 * Generates a new ray from the given sample.
 	 * 
 	 * @param sample
-	 *            {@link Sample} to construct the {@link Ray} from.
+	 *            sample to construct the ray from.
 	 * @throws NullPointerException
-	 *             when the given {@link Sample} is null.
-	 * @return a new {@link Ray} from the given {@link Sample}.
+	 *             when the given sample is null.
+	 * @return a new ray from the given sample.
 	 */
 	public Ray generateRay(Sample sample) throws NullPointerException;
 }

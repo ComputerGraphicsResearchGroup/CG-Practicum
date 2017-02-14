@@ -1,11 +1,11 @@
 package math;
 
 /**
- * Represents an {@link Ray} in three dimensional space starting at a given
- * {@link Point} and extending infinitely in a given direction.
+ * Represents an ray in three dimensional space starting at a given point and
+ * extending infinitely in a given direction.
  * 
  * @author Niels Billen
- * @version 1.0
+ * @version 0.3
  */
 public class Ray implements Cloneable {
 	/**
@@ -14,13 +14,13 @@ public class Ray implements Cloneable {
 	public final Point origin;
 
 	/**
-	 * The direction the ray is pointing to.
+	 * The direction the ray extends to.
 	 */
 	public final Vector direction;
 
 	/**
-	 * Creates a new {@link Ray} starting at the given origin and propagating
-	 * in the given direction.
+	 * Creates a new ray starting at the given origin and propagating in the
+	 * given direction.
 	 * 
 	 * @param origin
 	 *            the origin of the ray.
@@ -36,28 +36,6 @@ public class Ray implements Cloneable {
 			throw new NullPointerException("the given direction is null!");
 		this.origin = origin;
 		this.direction = direction;
-	}
-
-	/**
-	 * Creates a copy of the given {@link Ray}.
-	 * 
-	 * @param ray
-	 *            the ray to copy.
-	 * @throws NullPointerException
-	 *             when the given ray is null.
-	 */
-	public Ray(Ray ray) throws NullPointerException {
-		this(ray.origin, ray.direction);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#clone()
-	 */
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return new Ray(this);
 	}
 
 	/*

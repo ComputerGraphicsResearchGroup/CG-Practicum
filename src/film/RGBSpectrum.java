@@ -3,15 +3,14 @@ package film;
 import java.util.Locale;
 
 /**
- * An implementation of a {@link RGBSpectrum} which only stores a red, green and
- * blue component.
+ * A spectrum storing a red, green and color component with radiance as unit.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
 public class RGBSpectrum {
 	/**
-	 * A black {@link RGBSpectrum}.
+	 * A black spectrum.
 	 */
 	public static final RGBSpectrum BLACK = new RGBSpectrum(0);
 
@@ -31,8 +30,8 @@ public class RGBSpectrum {
 	public final double blue;
 
 	/**
-	 * Creates a {@link RGBSpectrum} where the red, green and blue color
-	 * components are equal to the given value.
+	 * Creates a spectrum where the red, green and blue color components are
+	 * equal to the given value.
 	 * 
 	 * @param value
 	 *            the value for the red, green and blue color components (in
@@ -45,7 +44,7 @@ public class RGBSpectrum {
 	}
 
 	/**
-	 * Creates a new {@link RGBSpectrum} from the given color components.
+	 * Creates a new spectrum from the given color components.
 	 * 
 	 * @param red
 	 *            the red color component (in radiance).
@@ -56,23 +55,27 @@ public class RGBSpectrum {
 	 * @throws IllegalArgumentException
 	 *             when one of the color components is infinite or not a number.
 	 */
-	public RGBSpectrum(double red, double green, double blue) throws IllegalArgumentException {
+	public RGBSpectrum(double red, double green, double blue)
+			throws IllegalArgumentException {
 		if (!isValidColorComponent(red))
-			throw new IllegalArgumentException("the red component is not a valid number! " + red);
+			throw new IllegalArgumentException(
+					"the red component is not a valid number! " + red);
 		if (!isValidColorComponent(green))
-			throw new IllegalArgumentException("the green component is not a valid number!" + green);
+			throw new IllegalArgumentException(
+					"the green component is not a valid number!" + green);
 		if (!isValidColorComponent(blue))
-			throw new IllegalArgumentException("the blue component is not a valid number!" + blue);
+			throw new IllegalArgumentException(
+					"the blue component is not a valid number!" + blue);
 		this.red = red;
 		this.blue = blue;
 		this.green = green;
 	}
 
 	/**
-	 * Creates a copy of the given {@link RGBSpectrum}.
+	 * Creates a copy of the given spectrum.
 	 * 
 	 * @param spectrum
-	 *            the {@link RGBSpectrum} to copy.
+	 *            the spectrum to copy.
 	 * @throws NullPointerException
 	 *             when the given spectrum is null.
 	 */
@@ -96,166 +99,174 @@ public class RGBSpectrum {
 	}
 
 	/**
-	 * Returns a new {@link RGBSpectrum} which is the sum of this and the given
-	 * {@link RGBSpectrum}.
+	 * Returns a new spectrum which is the sum of this and the given spectrum.
 	 * 
 	 * @param spectrum
-	 *            the {@link RGBSpectrum} to add to this {@link RGBSpectrum}.
+	 *            the spectrum to add to this spectrum.
 	 * @throws NullPointerException
-	 *             when the given {@link RGBSpectrum} is null.
-	 * @return a new {@link RGBSpectrum} which is the sum of this and the given
-	 *         {@link RGBSpectrum}.
+	 *             when the given spectrum is null.
+	 * @return a new spectrum which is the sum of this and the given spectrum.
 	 */
 	public RGBSpectrum add(RGBSpectrum spectrum) throws NullPointerException {
-		return new RGBSpectrum(this.red + spectrum.red, this.green + spectrum.green, this.blue + spectrum.blue);
+		return new RGBSpectrum(this.red + spectrum.red, this.green
+				+ spectrum.green, this.blue + spectrum.blue);
 	}
 
 	/**
-	 * Returns a new {@link RGBSpectrum} which is the sum of this and the given
+	 * Returns a new spectrum which is the sum of this and the given color
+	 * components.
+	 * 
+	 * @param red
+	 *            the red color component to add to this spectrum.
+	 * @param green
+	 *            the green color component to add to this spectrum.
+	 * @param blue
+	 *            the blue color component to add to this spectrum.
+	 * @throws IllegalArgumentException
+	 *             when one of the given color components is either infinite or
+	 *             not NaN.
+	 * @return a new spectrum which is the sum of this and the given spectrum.
+	 */
+	public RGBSpectrum add(double red, double green, double blue)
+			throws IllegalArgumentException {
+		if (!isValidColorComponent(red))
+			throw new IllegalArgumentException(
+					"the given red color component is not a valid number!");
+		if (!isValidColorComponent(green))
+			throw new IllegalArgumentException(
+					"the given green color component is not a valid number!");
+		if (!isValidColorComponent(blue))
+			throw new IllegalArgumentException(
+					"the given blue color component is not a valid number!");
+		return new RGBSpectrum(this.red + red, this.green + green, this.blue
+				+ blue);
+	}
+
+	/**
+	 * Returns a new spectrum which is the subtraction of this and the given
+	 * spectrum.
+	 * 
+	 * @param spectrum
+	 *            the spectrum to subtract to this spectrum.
+	 * @throws NullPointerException
+	 *             when the given spectrum is null.
+	 * @return a new spectrum which is the sum of this and the given spectrum.
+	 */
+	public RGBSpectrum subtract(RGBSpectrum spectrum)
+			throws NullPointerException {
+		return new RGBSpectrum(this.red - spectrum.red, this.green
+				- spectrum.green, this.blue - spectrum.blue);
+	}
+
+	/**
+	 * Returns a new spectrum which is the subtraction of this and the given
 	 * color components.
 	 * 
 	 * @param red
-	 *            the red color component to add to this {@link RGBSpectrum}.
+	 *            the red color component to subtract from this spectrum.
 	 * @param green
-	 *            the green color component to add to this {@link RGBSpectrum}.
+	 *            the green color component to subtract from to this spectrum.
 	 * @param blue
-	 *            the blue color component to add to this {@link RGBSpectrum}.
+	 *            the blue color component to subtract from to this spectrum.
 	 * @throws IllegalArgumentException
 	 *             when one of the given color components is either infinite or
 	 *             not NaN.
-	 * @return a new {@link RGBSpectrum} which is the sum of this and the given
-	 *         {@link RGBSpectrum}.
+	 * @return a new spectrum which is the sum of this and the given spectrum.
 	 */
-	public RGBSpectrum add(double red, double green, double blue) throws IllegalArgumentException {
+	public RGBSpectrum subtract(double red, double green, double blue)
+			throws IllegalArgumentException {
 		if (!isValidColorComponent(red))
-			throw new IllegalArgumentException("the given red color component is not a valid number!");
+			throw new IllegalArgumentException(
+					"the given red color component is not a valid number!");
 		if (!isValidColorComponent(green))
-			throw new IllegalArgumentException("the given green color component is not a valid number!");
+			throw new IllegalArgumentException(
+					"the given green color component is not a valid number!");
 		if (!isValidColorComponent(blue))
-			throw new IllegalArgumentException("the given blue color component is not a valid number!");
-		return new RGBSpectrum(this.red + red, this.green + green, this.blue + blue);
+			throw new IllegalArgumentException(
+					"the given blue color component is not a valid number!");
+		return new RGBSpectrum(this.red - red, this.green - green, this.blue
+				- blue);
 	}
 
 	/**
-	 * Returns a new {@link RGBSpectrum} which is the subtraction of this and
-	 * the given {@link RGBSpectrum}.
-	 * 
-	 * @param spectrum
-	 *            the {@link RGBSpectrum} to subtract to this
-	 *            {@link RGBSpectrum}.
-	 * @throws NullPointerException
-	 *             when the given {@link RGBSpectrum} is null.
-	 * @return a new {@link RGBSpectrum} which is the sum of this and the given
-	 *         {@link RGBSpectrum}.
-	 */
-	public RGBSpectrum subtract(RGBSpectrum spectrum) throws NullPointerException {
-		return new RGBSpectrum(this.red - spectrum.red, this.green - spectrum.green, this.blue - spectrum.blue);
-	}
-
-	/**
-	 * Returns a new {@link RGBSpectrum} which is the subtraction of this and
-	 * the given color components.
-	 * 
-	 * @param red
-	 *            the red color component to subtract from this
-	 *            {@link RGBSpectrum}.
-	 * @param green
-	 *            the green color component to subtract from to this
-	 *            {@link RGBSpectrum}.
-	 * @param blue
-	 *            the blue color component to subtract from to this
-	 *            {@link RGBSpectrum}.
-	 * @throws IllegalArgumentException
-	 *             when one of the given color components is either infinite or
-	 *             not NaN.
-	 * @return a new {@link RGBSpectrum} which is the sum of this and the given
-	 *         {@link RGBSpectrum}.
-	 */
-	public RGBSpectrum subtract(double red, double green, double blue) throws IllegalArgumentException {
-		if (!isValidColorComponent(red))
-			throw new IllegalArgumentException("the given red color component is not a valid number!");
-		if (!isValidColorComponent(green))
-			throw new IllegalArgumentException("the given green color component is not a valid number!");
-		if (!isValidColorComponent(blue))
-			throw new IllegalArgumentException("the given blue color component is not a valid number!");
-		return new RGBSpectrum(this.red - red, this.green - green, this.blue - blue);
-	}
-
-	/**
-	 * Returns a new {@link RGBSpectrum} which is equal to this
-	 * {@link RGBSpectrum} scaled by the given scalar.
+	 * Returns a new spectrum which is equal to this spectrum scaled by the
+	 * given scalar.
 	 * 
 	 * @param scalar
-	 *            the scalar to scale this {@link RGBSpectrum} with.
+	 *            the scalar to scale this spectrum with.
 	 * @throws IllegalArgumentException
 	 *             when the given scalar is either infinite or not NaN.
-	 * @return a new {@link RGBSpectrum} which is equal to this
-	 *         {@link RGBSpectrum} scaled by the given scalar.
+	 * @return a new spectrum which is equal to this spectrum scaled by the
+	 *         given scalar.
 	 */
 	public RGBSpectrum scale(double scalar) throws IllegalArgumentException {
 		if (!isValidColorComponent(scalar))
-			throw new IllegalArgumentException("the given scalar is not a valid number!");
+			throw new IllegalArgumentException(
+					"the given scalar is not a valid number!");
 		return new RGBSpectrum(scalar * red, scalar * green, scalar * blue);
 	}
 
 	/**
-	 * Returns a new {@link RGBSpectrum} which is equal to this
-	 * {@link RGBSpectrum} divided by the given divisor.
+	 * Returns a new spectrum which is equal to this spectrum divided by the
+	 * given divisor.
 	 * 
 	 * @param divisor
-	 *            the divisor to divide this {@link RGBSpectrum} with.
+	 *            the divisor to divide this spectrum with.
 	 * @throws IllegalArgumentException
 	 *             when the given divisor is either zero, infinite or not NaN.
-	 * @return a new {@link RGBSpectrum} which is equal to this
-	 *         {@link RGBSpectrum} scaled by the given scalar.
+	 * @return a new spectrum which is equal to this spectrum scaled by the
+	 *         given scalar.
 	 */
 	public RGBSpectrum divide(double divisor) throws IllegalArgumentException {
 		if (divisor == 0.0)
-			throw new IllegalArgumentException("the divisor cannot be equal to zero!");
+			throw new IllegalArgumentException(
+					"the divisor cannot be equal to zero!");
 		if (!isValidColorComponent(divisor))
-			throw new IllegalArgumentException("the given scalar is not a valid number!");
+			throw new IllegalArgumentException(
+					"the given scalar is not a valid number!");
 		return scale(1.0 / divisor);
 	}
 
 	/**
-	 * Returns a new {@link RGBSpectrum} where the components of this and the
-	 * given {@link RGBSpectrum} are multiplied together.
+	 * Returns a new spectrum where the components of this and the given
+	 * spectrum are multiplied together.
 	 * 
 	 * @param spectrum
-	 *            the {@link RGBSpectrum} to multiply with.
-	 * @return a new {@link RGBSpectrum} where the components of this and the
-	 *         given {@link RGBSpectrum} are multiplied together.
+	 *            the spectrum to multiply with.
+	 * @return a new spectrum where the components of this and the given
+	 *         spectrum are multiplied together.
 	 */
 	public RGBSpectrum multiply(RGBSpectrum spectrum) {
-		return new RGBSpectrum(red * spectrum.red, green * spectrum.green, blue * spectrum.blue);
+		return new RGBSpectrum(red * spectrum.red, green * spectrum.green, blue
+				* spectrum.blue);
 	}
 
 	/**
-	 * Returns a new {@link RGBSpectrum} where all the color components of this
-	 * {@link RGBSpectrum} are raised to the given power.
+	 * Returns a new spectrum where all the color components of this spectrum
+	 * are raised to the given power.
 	 * 
 	 * @param power
-	 *            the power to raise the color components of this
-	 *            {@link RGBSpectrum} to.
-	 * @return a new {@link RGBSpectrum} where all the color components of this
-	 *         {@link RGBSpectrum} are raised to the given power.
+	 *            the power to raise the color components of this spectrum to.
+	 * @return a new spectrum where all the color components of this spectrum
+	 *         are raised to the given power.
 	 */
 	public RGBSpectrum pow(double power) {
 		if (power == 1.0)
 			return this;
-		return new RGBSpectrum(Math.pow(red, power), Math.pow(green, power), Math.pow(blue, power));
+		return new RGBSpectrum(Math.pow(red, power), Math.pow(green, power),
+				Math.pow(blue, power));
 	}
 
 	/**
-	 * Returns a new {@link RGBSpectrum} which has the color spectra of this
-	 * {@link RGBSpectrum} clamped to the given lower and upper bound.
+	 * Returns a new spectrum which has the color spectra of this spectrum
+	 * clamped to the given lower and upper bound.
 	 * 
 	 * @param low
-	 *            the lower bound to clamp this {@link RGBSpectrum} to.
+	 *            the lower bound to clamp this spectrum to.
 	 * @param high
-	 *            the upper bound to clamp this {@link RGBSpectrum} to.
-	 * @return a new {@link RGBSpectrum} which has the color spectra of this
-	 *         {@link RGBSpectrum} clamped to the given lower and upper bound.
+	 *            the upper bound to clamp this spectrum to.
+	 * @return a new spectrum which has the color spectra of this spectrum
+	 *         clamped to the given lower and upper bound.
 	 */
 	public RGBSpectrum clamp(double low, double high) {
 		double r = Math.min(high, Math.max(low, red));
@@ -265,7 +276,7 @@ public class RGBSpectrum {
 	}
 
 	/**
-	 * Returns whether this {@link RGBSpectrum} is black.
+	 * Returns whether this spectrum is black.
 	 * 
 	 * @return true when all the color components are zero.
 	 */
@@ -274,13 +285,13 @@ public class RGBSpectrum {
 	}
 
 	/**
-	 * Returns this {@link RGBSpectrum} as a 32-bit color.
+	 * Returns this spectrum as a 32-bit color.
 	 * 
 	 * To convert the radiance to a 32-bit displayable color, the components of
-	 * this {@link RGBSpectrum} are clamped between 0 and 255 and rounded to the
-	 * nearest integer.
+	 * this spectrum are clamped between 0 and 255 and rounded to the nearest
+	 * integer.
 	 * 
-	 * @return this {@link RGBSpectrum} as a 32-bit color.
+	 * @return this spectrum as a 32-bit color.
 	 */
 	public int toRGB() {
 		int r = Math.min(255, Math.max(0, (int) Math.round(red)));
@@ -302,8 +313,7 @@ public class RGBSpectrum {
 		temp = Double.doubleToLongBits(green);
 		result = 31 * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(red);
-		result = 31 * result + (int) (temp ^ (temp >>> 32));
-		return result;
+		return 31 * result + (int) (temp ^ (temp >>> 32));
 	}
 
 	/*
@@ -319,8 +329,18 @@ public class RGBSpectrum {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RGBSpectrum other = (RGBSpectrum) obj;
-		return red == other.red && green == other.green && blue == other.blue;
+		RGBSpectrum spectrum = (RGBSpectrum) obj;
+
+		if (Double.doubleToLongBits(red) != Double
+				.doubleToLongBits(spectrum.red))
+			return false;
+		if (Double.doubleToLongBits(green) != Double
+				.doubleToLongBits(spectrum.green))
+			return false;
+		if (Double.doubleToLongBits(blue) != Double
+				.doubleToLongBits(spectrum.blue))
+			return false;
+		return true;
 	}
 
 	/*
@@ -330,6 +350,7 @@ public class RGBSpectrum {
 	 */
 	@Override
 	public String toString() {
-		return String.format(Locale.ENGLISH, "[%s]: (%.6f, %.6f, %.6f)", getClass().getName(), red, green, blue);
+		return String.format(Locale.ENGLISH, "[%s]: (%.6f, %.6f, %.6f)",
+				getClass().getName(), red, green, blue);
 	}
 }

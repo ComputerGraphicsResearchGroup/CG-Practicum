@@ -4,36 +4,36 @@ import java.util.Comparator;
 import java.util.Locale;
 
 /**
- * Point implementation in three dimensions.
+ * A position in three-dimensional space.
  * 
  * @author Niels Billen
- * @version 1.0
+ * @version 0.3
  */
-public class Point implements Cloneable, Comparable<Point> {
+public class Point implements Comparable<Point> {
 	/**
-	 * x coordinate of this {@link Point}.
+	 * x coordinate of this point.
 	 */
 	public final double x;
 
 	/**
-	 * y coordinate of this {@link Point}.
+	 * y coordinate of this point.
 	 */
 	public final double y;
 
 	/**
-	 * z coordinate of this {@link Point}.
+	 * z coordinate of this point.
 	 */
 	public final double z;
 
 	/**
-	 * Creates a {@link Point} at the origin.
+	 * Creates a point at the origin.
 	 */
 	public Point() {
 		this(0, 0, 0);
 	}
 
 	/**
-	 * Creates a new {@link Point} at the given position.
+	 * Creates a new point at the given position.
 	 * 
 	 * @param x
 	 *            the x coordinate.
@@ -49,7 +49,7 @@ public class Point implements Cloneable, Comparable<Point> {
 	}
 
 	/**
-	 * Creates a new {@link Point} at the given position, scaled by the given
+	 * Creates a new point at the given position, scaled by the given
 	 * homogeneous coordinate.
 	 * 
 	 * @param x
@@ -69,25 +69,13 @@ public class Point implements Cloneable, Comparable<Point> {
 	}
 
 	/**
-	 * Creates a copy of the given {@link Point}.
-	 * 
-	 * @param point
-	 *            the {@link Point} to copy.
-	 * @throws NullPointerException
-	 *             when the given {@link Point} is null.
-	 */
-	public Point(Point point) throws NullPointerException {
-		this(point.x, point.y, point.z);
-	}
-
-	/**
-	 * Returns the coordinate of this {@link Point} along the given axis.
+	 * Returns the coordinate of this point along the given axis.
 	 * 
 	 * @param axis
 	 *            axis to retrieve the coordinate of (0=x, 1=y, 2=z axis).
 	 * @throws IllegalArgumentException
 	 *             when the given axis is smaller than zero or larger than two.
-	 * @return the coordinate of this {@link Point} along the given axis.
+	 * @return the coordinate of this point along the given axis.
 	 */
 	public double get(int axis) throws IllegalArgumentException {
 		switch (axis) {
@@ -104,8 +92,8 @@ public class Point implements Cloneable, Comparable<Point> {
 	}
 
 	/**
-	 * Constructs a {@link Point} equal to this {@link Point} translated by the
-	 * given coordinates.
+	 * Constructs a point equal to this point translated by the given
+	 * coordinates.
 	 * 
 	 * @param x
 	 *            the x coordinate.
@@ -113,31 +101,30 @@ public class Point implements Cloneable, Comparable<Point> {
 	 *            the y coordinate.
 	 * @param z
 	 *            the z coordinate.
-	 * @return a new {@link Point} which is equal to this {@link Point}
-	 *         translated by the given coordinates.
+	 * @return a new point which is equal to this point translated by the given
+	 *         coordinates.
 	 */
 	public Point add(double x, double y, double z) {
 		return new Point(this.x + x, this.y + y, this.z + z);
 	}
 
 	/**
-	 * Constructs a {@link Point} equal to this {@link Point} translated by the
-	 * given {@link Vector}.
+	 * Constructs a point equal to this point translated by the given vector.
 	 * 
 	 * @param vector
-	 *            the {@link Vector} to add to this {@link Point}.
+	 *            the vector to add to this point.
 	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
-	 * @return a new {@link Point} which is equal to this {@link Point}
-	 *         translated by the given {@link Vector}.
+	 *             when the given vector is null.
+	 * @return a new point which is equal to this point translated by the given
+	 *         vector.
 	 */
 	public Point add(Vector vector) throws NullPointerException {
 		return add(vector.x, vector.y, vector.z);
 	}
 
 	/**
-	 * Constructs the {@link Vector} spanned between this {@link Point} and the
-	 * given coordinates.
+	 * Constructs the vector spanned between this point and the given
+	 * coordinates.
 	 * 
 	 * @param x
 	 *            the x coordinate.
@@ -145,63 +132,61 @@ public class Point implements Cloneable, Comparable<Point> {
 	 *            the y coordinate.
 	 * @param z
 	 *            the z coordinate.
-	 * @return a new {@link Vector} equal to the {@link Vector} spanned between
-	 *         this {@link Point} and the given coordinates.
+	 * @return a new vector equal to the vector spanned between this point and
+	 *         the given coordinates.
 	 */
 	public Vector subtract(double x, double y, double z) {
 		return new Vector(this.x - x, this.y - y, this.z - z);
 	}
 
 	/**
-	 * Constructs the {@link Vector} spanned between this {@link Point} and the
-	 * given {@link Point}.
+	 * Constructs the vector spanned between this point and the given point.
 	 * 
 	 * @param point
-	 *            the {@link Point} to span the {@link Vector} with.
+	 *            the point to span the vector with.
 	 * @throws NullPointerException
-	 *             when the given {@link Point} is null.
-	 * @return a new {@link Vector} equal to the {@link Vector} spanned between
-	 *         this {@link Point} and the given {@link Point}.
+	 *             when the given point is null.
+	 * @return a new vector equal to the vector spanned between this point and
+	 *         the given point.
 	 */
 	public Vector subtract(Point point) throws NullPointerException {
 		return subtract(point.x, point.y, point.z);
 	}
 
 	/**
-	 * Constructs the {@link Point} equal to this {@link Point} with its
-	 * coordinates scaled by the given scalar.
+	 * Constructs the point equal to this point with its coordinates scaled by
+	 * the given scalar.
 	 * 
 	 * @param scalar
-	 *            the scalar to scale this {@link Point} with.
-	 * @return a new {@link Point} equal to this {@link Point} with its
-	 *         coordinates scaled by the given scalar.
+	 *            the scalar to scale this point with.
+	 * @return a new point equal to this point with its coordinates scaled by
+	 *         the given scalar.
 	 */
 	public Point scale(double scalar) {
 		return new Point(x * scalar, y * scalar, z * scalar);
 	}
 
 	/**
-	 * Constructs the {@link Point} equal to this {@link Point} with its
-	 * coordinates divided by the given divisor.
+	 * Constructs the point equal to this point with its coordinates divided by
+	 * the given divisor.
 	 * 
 	 * @param divisor
-	 *            the divisor to scale this {@link Point} with.
-	 * @return a new {@link Point} equal to this {@link Point} with its
-	 *         coordinates divided by the given divisor.
+	 *            the divisor to scale this point with.
+	 * @return a new point equal to this point with its coordinates divided by
+	 *         the given divisor.
 	 */
 	public Point divide(double divisor) {
 		return scale(1.0 / divisor);
 	}
 
 	/**
-	 * Returns a comparator to sort {@link Point} objects along the given axis.
+	 * Returns a comparator to sort point objects along the given axis.
 	 * 
 	 * @param axis
-	 *            the axis to sort the {@link Point}s along.
+	 *            the axis to sort the points along.
 	 * @throws IllegalArgumentException
 	 *             when the given axis is smaller than zero or larger than two.
-	 * @return a comparator to sort objects of {@link Point} along the given
-	 *         axis.
+	 * @return a comparator to sort objects of point along the given axis.
 	 */
 	public Comparator<Point> getComparator(final int axis)
 			throws IllegalArgumentException {
@@ -219,29 +204,9 @@ public class Point implements Cloneable, Comparable<Point> {
 	}
 
 	/**
-	 * Converts this {@link Point} to a three dimensional array.
+	 * Converts this point to a vector.
 	 * 
-	 * @return this {@link Point} as a three dimensional array.
-	 */
-	public double[] toArray() {
-		return new double[] { x, y, z };
-	}
-
-	/**
-	 * Returns this {@link Point} as a four dimensional array with the fourth
-	 * coordinate being the homogeneous coordinate.
-	 * 
-	 * @return this {@link Point} as a four dimensional array with the fourth
-	 *         coordinate being the homogeneous coordinate.
-	 */
-	public double[] toHomogenousArray() {
-		return new double[] { x, y, z, 1.0 };
-	}
-
-	/**
-	 * Converts this {@link Point} to a {@link Vector}.
-	 * 
-	 * @return this {@link Point} as a {@link Vector}.
+	 * @return this point as a vector.
 	 */
 	public Vector toVector() {
 		return new Vector(x, y, z);
@@ -250,11 +215,39 @@ public class Point implements Cloneable, Comparable<Point> {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#clone()
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return new Point(this);
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Point))
+			return false;
+		Point p = (Point) obj;
+
+		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(p.x))
+			return false;
+		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(p.y))
+			return false;
+		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(p.z))
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		int result = 1;
+		long temp = Double.doubleToLongBits(x);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z);
+		return 31 * result + (int) (temp ^ (temp >>> 32));
 	}
 
 	/*

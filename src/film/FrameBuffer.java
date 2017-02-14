@@ -3,38 +3,35 @@ package film;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
- * Implementation of a {@link FrameBuffer} which is a two dimensional grid of
- * {@link Pixel}s.
+ * A wrapper for a two-dimensional array of pixels.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
 public class FrameBuffer {
 	/**
-	 * Two-dimensional array of {@link Pixel}s. The {@link Pixel}s are stored in
-	 * row order. When iterating over the {@link Pixel}s, one should first
-	 * iterate over the y coordinates, followed by the x coordinates for optimal
-	 * performance.
+	 * Two-dimensional array of pixels. The pixels are stored in row order. When
+	 * iterating over the pixels, one should first iterate over the y
+	 * coordinates, followed by the x coordinates for optimal performance.
 	 */
 	private final Pixel[][] frameBuffer;
 
 	/**
-	 * The horizontal resolution of this {@link FrameBuffer}.
+	 * The horizontal resolution of this frame buffer.
 	 */
 	public final int xResolution;
 
 	/**
-	 * The vertical resolution of this {@link FrameBuffer}.
+	 * The vertical resolution of this frame buffer.
 	 */
 	public final int yResolution;
 
 	/**
-	 * Creates a new black {@link FrameBuffer} with the given dimension.
+	 * Creates a new black frame buffer with the given dimension initialized
+	 * with black pixels.
 	 * 
 	 * @param xResolution
 	 *            the horizontal resolution.
@@ -61,12 +58,38 @@ public class FrameBuffer {
 	}
 
 	/**
-	 * Returns the {@link Pixel} at the given coordinates.
+	 * Returns the pixel at the given coordinates.
+	 * 
+	 * Note that when iterating over the pixels in this buffer, one should first
+	 * iterate over the y coordinates for optimal performance.<br>
+	 * 
+	 * <pre>
+	 * {@code
+	 * 		// good
+	 * 		for(int y = 0; y < yResolution; ++y)
+	 * 			for(int x = 0; x < yResolution; ++y)
+	 * 				// do stuff
+	 * 
+	 * 		// bad
+	 * 		for(int x = 0; x < xResolution; ++x)
+	 * 			for(int y = 0; y < yResolution; ++y)
+	 * 				// do stuff
+	 * }
+	 * </pre>
 	 * 
 	 * @param x
 	 *            the x coordinate.
 	 * @param y
 	 *            the y coordinate.
+	 * @throws ArrayIndexOutOfBoundsException
+	 *             when the given x coordinate or y coordinate is smaller than
+	 *             zero.
+	 * @throws ArrayIndexOutOfBoundsException
+	 *             when the given x coordinate is larger than or equal to the
+	 *             horizontal resolution of the image.
+	 * @throws ArrayIndexOutOfBoundsException
+	 *             when the given y coordinate is larger than or equal to the
+	 *             vertical resolution of the image.
 	 * @return the {@link Pixel} at the given coordinates.
 	 */
 	public Pixel getPixel(int x, int y) throws ArrayIndexOutOfBoundsException {
@@ -74,42 +97,30 @@ public class FrameBuffer {
 	}
 
 	/**
-	 * Subdivides this {@link FrameBuffer} in {@link Tile}s with the given width
-	 * and height.
+	 * Returns a collection of tiles which completely cover this frame buffer.
+	 * 
+	 * The size of the tiles will never exceed the given maximum width and
+	 * height.
 	 * 
 	 * @param width
-	 *            the preferred width of the {@link Tile}s.
+	 *            the maximum width of the tiles.
 	 * @param height
-	 *            the preferred height of the {@link Tile}s.
-	 * @return a {@link Collection} of non-overlapping {@link Tile}s covering
-	 *         the entire size of this {@link FrameBuffer}.
+	 *            the maximum height of the tiles.
+	 * @return a collection of non-overlapping tiles covering the entire size of
+	 *         this frame buffer.
 	 */
 	public Collection<Tile> subdivide(int width, int height) {
-		if (width <= 0)
-			throw new IllegalArgumentException(
-					"the width of a tile must be larger than zero!");
-		if (height <= 0)
-			throw new IllegalArgumentException(
-					"the height of a tile must be larger than zero!");
-
-		List<Tile> result = new ArrayList<Tile>();
-		for (int y = 0; y < yResolution; y += height) {
-			for (int x = 0; x < xResolution; x += width) {
-				int xEnd = Math.min(xResolution, x + width);
-				int yEnd = Math.min(yResolution, y + height);
-				result.add(new Tile(this, x, y, xEnd, yEnd));
-			}
-		}
-		return result;
+		return new Tile(0, 0, xResolution, yResolution)
+				.subdivide(width, height);
 	}
 
 	/**
-	 * Converts this {@link FrameBuffer} object to a {@link BufferedImage}.
+	 * Converts this frame buffer object to a buffered image.
 	 * 
-	 * The contents of the {@link Pixel}s in this {@link FrameBuffer} have
-	 * radiance units which can have arbitrarily large values. To display these
-	 * radiance values on a display, they have to be <i>tone-mapped</i> within
-	 * to values within the range [0, 255].
+	 * The contents of the pixels in this frame buffer have radiance as unit,
+	 * which can have arbitrarily large values. To display these radiance values
+	 * on a display, they have to be <i>tone-mapped</i> within to values within
+	 * the range [0, 255].
 	 * 
 	 * The radiance values are first clamped between zero and the inverse of the
 	 * given sensitivity. The radiance values are then divided by the given
@@ -157,12 +168,14 @@ public class FrameBuffer {
 
 		BufferedImage image = new BufferedImage(xResolution, yResolution,
 				BufferedImage.TYPE_INT_ARGB);
-		
+
 		WritableRaster raster = image.getRaster();
 		DataBufferInt rasterBuffer = (DataBufferInt) raster.getDataBuffer();
 		int[] rasterData = rasterBuffer.getData();
 
 		for (int y = 0; y < yResolution; ++y) {
+			int yOffset = (yResolution - y - 1) * xResolution;
+
 			for (int x = 0; x < xResolution; ++x) {
 				Pixel pixel = getPixel(x, y);
 				RGBSpectrum spectrum = pixel.getSpectrum();
@@ -170,7 +183,7 @@ public class FrameBuffer {
 				int rgb = spectrum.clamp(0, invSensitivity).scale(sensitivity)
 						.pow(invGamma).scale(255).toRGB();
 
-				rasterData[x + (yResolution - y - 1) * xResolution] = rgb;
+				rasterData[x + yOffset] = rgb;
 			}
 		}
 

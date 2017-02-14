@@ -3,32 +3,31 @@ package film;
 import java.util.Locale;
 
 /**
- * Representation of a {@link Pixel} which contains a weighted sum of
- * {@link RGBSpectrum}s.
+ * A pixel which stores a weighted sum of spectra.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
 public class Pixel {
 	/**
-	 * The sum of the {@link RGBSpectrum}s.
+	 * The sum of all the spectra.
 	 */
 	private RGBSpectrum color = RGBSpectrum.BLACK;
 
 	/**
-	 * Total sum of the weights.
+	 * The sum of the weights.
 	 */
 	private double weightSum = 0;
 
 	/**
-	 * Creates a new black {@link Pixel}.
+	 * Creates a new black pixel.
 	 */
 	public Pixel() {
 	}
 
 	/**
-	 * Adds the given color values to this {@link Pixel}, weighted by the given
-	 * weight parameter.
+	 * Adds the given color values to this pixel, weighted by the given weight
+	 * parameter.
 	 * 
 	 * @param red
 	 *            the red color component (in radiance).
@@ -49,8 +48,7 @@ public class Pixel {
 	}
 
 	/**
-	 * Adds the given color values to this {@link Pixel}, weighted by the given
-	 * weight parameter.
+	 * Adds the given color values to this pixel with a weight of 1.0
 	 * 
 	 * @param red
 	 *            the red color component (in radiance).
@@ -68,15 +66,15 @@ public class Pixel {
 	}
 
 	/**
-	 * Adds the given {@link RGBSpectrum} to this {@link Pixel}, weighted by the
-	 * given weight parameter.
+	 * Adds the given spectrum to this pixel weighted by the given weight
+	 * parameter.
 	 * 
 	 * @param spectrum
-	 *            the {@link RGBSpectrum} to add to this {@link Pixel}.
+	 *            the spectrum to add to this pixel.
 	 * @param weight
 	 *            the weight for the color components.
 	 * @throws NullPointerException
-	 *             when the given {@link RGBSpectrum} is equal to zero.
+	 *             when the given spectrum is equal to zero.
 	 * @throws IllegalArgumentException
 	 *             when the weight is either infinite or not NaN.
 	 */
@@ -88,12 +86,12 @@ public class Pixel {
 	}
 
 	/**
-	 * Adds the given {@link RGBSpectrum} to this {@link Pixel}.
+	 * Adds the given spectrum to this pixel.
 	 * 
 	 * @param spectrum
-	 *            the {@link RGBSpectrum} to add to this {@link Pixel}.
+	 *            the spectrum to add to this pixel.
 	 * @throws NullPointerException
-	 *             when the given {@link RGBSpectrum} is equal to zero.
+	 *             when the given spectrum is equal to zero.
 	 */
 	public void add(RGBSpectrum spectrum) throws NullPointerException {
 		if (spectrum == null)
@@ -102,9 +100,9 @@ public class Pixel {
 	}
 
 	/**
-	 * Returns the {@link RGBSpectrum} of this {@link Pixel}.
+	 * Returns the spectrum of this pixel.
 	 * 
-	 * @return the {@link RGBSpectrum} of this {@link Pixel}.
+	 * @return the spectrum of this pixel.
 	 */
 	public RGBSpectrum getSpectrum() {
 		if (weightSum == 0)

@@ -1,421 +1,143 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Hashtable;
-import java.util.Locale;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JSlider;
-import javax.swing.KeyStroke;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
+import film.FrameBuffer;
+
 /**
- * A {@link JFrame} which displays the progress of a render as an image and as a
- * progress bar. Functionality to save the image is also supported.
+ * A frame which display the progress of a render.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
-public class RenderFrame implements ProgressListener {
-	private JFrame frame;
-	private ImagePanel panel;
-	private JProgressBar bar = new JProgressBar(0, 100);
-	private JSlider sensitivity = new JSlider();
-	private JSlider gamma = new JSlider();
+public class RenderFrame extends JFrame implements ProgressListener {
+	/**
+	 * A unique id required for serialization (required by the Serializable
+	 * interface which JFrame implements).
+	 */
+	private static final long serialVersionUID = -2141536191366207069L;
 
 	/**
-	 * Creates a new {@link RenderFrame} displaying the given {@link Image} in a
-	 * {@link JFrame} with the given title.
-	 * 
-	 * @param title
-	 *            the title for the {@link JFrame}.
-	 * @param panel
-	 *            image to display in the {@link JFrame}.
-	 * @throws NullPointerException
-	 *             when the given title is null.
-	 * @throws NullPointerException
-	 *             when the given {@link ImagePanel} is null.
+	 * The menu bar for the graphical user interface.
 	 */
-	public RenderFrame(final String title, final ImagePanel panel) throws NullPointerException {
-		if (title == null)
-			throw new NullPointerException("the given title is null!");
-		if (panel == null)
-			throw new NullPointerException("the given panel is null!");
+	private final Menubar menu;
 
-		this.frame = new JFrame(title);
-		this.panel = panel;
+	/**
+	 * Progress bar indicating the percentage of completion of the render.
+	 */
+	private final JProgressBar bar;
 
-		// customize the progress bar
-		bar.setPreferredSize(new Dimension(-1, 48));
+	/**
+	 * A panel which allows the user to manipulate the gamma and sensitivity.
+	 */
+	private final ControlPanel control;
+
+	/**
+	 * Panel which shows a preview of the render.
+	 */
+	public final ImagePanel panel;
+
+	/**
+	 * The frame buffer.
+	 */
+	private final FrameBuffer buffer;
+
+	/**
+	 * Creates a user interface which shows the progress of the render which is
+	 * stored in the given frame buffer. The progress will be visualized as an
+	 * image, tone mapped with the given sensitivity and gamma.
+	 * 
+	 * This method makes sure that all the components of the user interface are
+	 * created and started on the AWT event dispatching thread.
+	 * 
+	 * @param buffer
+	 *            the frame buffer which stores the rendered image.
+	 * @param gamma
+	 *            the gamma exponent to tone map the image with.
+	 * @param sensitivity
+	 *            the sensitivity to scale the image with.
+	 * @throws NullPointerException
+	 *             when the given frame buffer is null.
+	 * @throws IllegalArgumentException
+	 *             when the sensitivity is smaller than or equal to zero.
+	 * @throws IllegalArgumentException
+	 *             when the sensitivity is either infinite or NaN.
+	 * @throws IllegalArgumentException
+	 *             when the gamma is smaller than or equal to zero.
+	 * @throws IllegalArgumentException
+	 *             when the gamma is either infinite or NaN.
+	 */
+	private RenderFrame(FrameBuffer buffer, double sensitivity, double gamma)
+			throws NullPointerException {
+		super("CG Project");
+
+		if (buffer == null)
+			throw new IllegalArgumentException(
+					"the given frame buffer is null!");
+		this.buffer = buffer;
+
+		// Create the image panel
+		panel = new ImagePanel(buffer, sensitivity, gamma);
+
+		// Create the menu bar
+		menu = new Menubar(this);
+		setJMenuBar(menu);
+
+		// Create the progress bar
+		bar = new JProgressBar(0, 100);
 		bar.setStringPainted(true);
-		bar.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+		bar.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-		// add a file bar
-		frame.setJMenuBar(createMenuBar());
-		frame.add(createControlPanel(), BorderLayout.EAST);
-		frame.add(panel, BorderLayout.CENTER);
-		frame.add(bar, BorderLayout.SOUTH);
-		frame.pack();
+		// Create the control panel
+		control = new ControlPanel(this);
+		control.setPreferredSize(new Dimension(320, -1));
+
+		// Add the components
+		add(control, BorderLayout.EAST);
+		add(panel, BorderLayout.CENTER);
+		add(bar, BorderLayout.SOUTH);
+
+		// Determine the size and center
+		pack();
 		center();
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		// Show the usedr interface.
+		setVisible(true);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	/**
-	 * Creates the {@link JPanel} with the controls for the image exposure,
-	 * gamma and save button.
-	 * 
-	 * @return the {@link JPanel} with the controls for the image exposure,
-	 *         gamma and save button.
-	 */
-	private JPanel createControlPanel() {
-		// create a wrapper for the control panel which will have a raised
-		// border
-		JPanel controlWrapper = new JPanel();
-		controlWrapper.setLayout(new BoxLayout(controlWrapper, BoxLayout.Y_AXIS));
-		controlWrapper.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-
-		// create shared objects
-		final Border border = BorderFactory.createEmptyBorder(8, 8, 8, 8);
-		final Dimension sliderDimension = new Dimension(320, 64);
-
-		/**********************************************************************
-		 * Create the slider for the exposure
-		 *********************************************************************/
-
-		int sensitivityValue = (int) (Math.log10(panel.getSensitivity()) * 10.0);
-
-		// create the label for the exposure
-		final JLabel exposureLabel = new JLabel(
-				String.format(Locale.ENGLISH, "Sensitivity: %e", Math.pow(10, sensitivityValue)));
-		exposureLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		exposureLabel.setBorder(border);
-
-		// set the ticks
-		sensitivity.setMinorTickSpacing(5);
-		sensitivity.setMajorTickSpacing(10);
-		sensitivity.setSnapToTicks(false);
-		sensitivity.setPaintLabels(true);
-		sensitivity.setPaintTicks(true);
-
-		// set the range
-		sensitivity.setMinimum(-100);
-		sensitivity.setMaximum(100);
-		sensitivity.setValue(sensitivityValue);
-
-		// set the labels
-		Hashtable<Integer, JLabel> exposureLabels = new Hashtable<Integer, JLabel>();
-		exposureLabels.put(-100, new JLabel("1e-10", JLabel.CENTER));
-		exposureLabels.put(-50, new JLabel("1e-5", JLabel.CENTER));
-		exposureLabels.put(0, new JLabel("1e0", JLabel.CENTER));
-		exposureLabels.put(50, new JLabel("1e5", JLabel.CENTER));
-		exposureLabels.put(100, new JLabel("1e10", JLabel.CENTER));
-		sensitivity.setLabelTable(exposureLabels);
-
-		// set the size
-		sensitivity.setMinimumSize(sliderDimension);
-		sensitivity.setPreferredSize(sliderDimension);
-		sensitivity.setMaximumSize(sliderDimension);
-		sensitivity.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-		// listen to changes
-		sensitivity.addChangeListener(new ChangeListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * javax.swing.event.ChangeListener#stateChanged(javax.swing.event
-			 * .ChangeEvent)
-			 */
-			@Override
-			public void stateChanged(ChangeEvent event) {
-				double sensitivity = Math.pow(10.0, RenderFrame.this.sensitivity.getValue() * 0.1);
-
-				exposureLabel.setText(String.format(Locale.ENGLISH, "Sensitivity: %e", sensitivity));
-
-				if (RenderFrame.this.panel != null)
-					RenderFrame.this.panel.setSensitivity(sensitivity);
-			}
-		});
-
-		/**********************************************************************
-		 * Create the slider for the gamma
-		 *********************************************************************/
-
-		int gammaValue = (int) (panel.getGamma() * 10.0);
-
-		final JLabel gammaLabel = new JLabel(String.format(Locale.ENGLISH, "Gamma: %2.1f", gammaValue * 0.1));
-		gammaLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		gammaLabel.setBorder(border);
-
-		// set the ticks
-		gamma.setMinorTickSpacing(1);
-		gamma.setMajorTickSpacing(5);
-		gamma.setSnapToTicks(true);
-		gamma.setPaintLabels(true);
-		gamma.setPaintTicks(true);
-
-		// set the range
-		gamma.setMinimum(1);
-		gamma.setMaximum(40);
-		gamma.setValue(gammaValue);
-
-		// set the labels
-		Hashtable<Integer, JLabel> gammaLabels = new Hashtable<Integer, JLabel>();
-		gammaLabels.put(1, new JLabel("0.1", JLabel.CENTER));
-		gammaLabels.put(10, new JLabel("1.0", JLabel.CENTER));
-		gammaLabels.put(20, new JLabel("2.0", JLabel.CENTER));
-		gammaLabels.put(30, new JLabel("3.0", JLabel.CENTER));
-		gammaLabels.put(40, new JLabel("4.0", JLabel.CENTER));
-		gamma.setLabelTable(gammaLabels);
-
-		// set the size
-		gamma.setMinimumSize(sliderDimension);
-		gamma.setPreferredSize(sliderDimension);
-		gamma.setMaximumSize(sliderDimension);
-		gamma.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-		// listen to changes
-		gamma.addChangeListener(new ChangeListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * javax.swing.event.ChangeListener#stateChanged(javax.swing.event
-			 * .ChangeEvent)
-			 */
-			@Override
-			public void stateChanged(ChangeEvent event) {
-				double gamma = RenderFrame.this.gamma.getValue() * 0.1;
-				gammaLabel.setText(String.format(Locale.ENGLISH, "Gamma: %2.1f", gamma));
-
-				if (RenderFrame.this.panel != null)
-					RenderFrame.this.panel.setGamma(gamma);
-			}
-		});
-
-		/**********************************************************************
-		 * Create the save button
-		 *********************************************************************/
-
-		JButton save = new JButton("Save image");
-		save.setAlignmentX(Component.CENTER_ALIGNMENT);
-		save.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				saveImage();
-			}
-		});
-
-		/**********************************************************************
-		 * Construct the panels
-		 *********************************************************************/
-
-		JPanel exposurePanel = new JPanel();
-		exposurePanel.setLayout(new BoxLayout(exposurePanel, BoxLayout.Y_AXIS));
-		exposurePanel.setBorder(BorderFactory.createTitledBorder("Sensitivity"));
-		exposurePanel.add(sensitivity);
-		exposurePanel.add(exposureLabel);
-
-		JPanel gammaPanel = new JPanel();
-		gammaPanel.setLayout(new BoxLayout(gammaPanel, BoxLayout.Y_AXIS));
-		gammaPanel.setBorder(BorderFactory.createTitledBorder("Gamma"));
-		gammaPanel.add(gamma);
-		gammaPanel.add(gammaLabel);
-
-		// create the resulting control panel which has a vertical layout
-		JPanel controls = new JPanel();
-		controls.setLayout(new BoxLayout(controls, BoxLayout.Y_AXIS));
-		controls.setBorder(border);
-
-		controls.add(exposurePanel);
-		controls.add(gammaPanel);
-		controls.add(Box.createVerticalGlue());
-		controls.add(save);
-
-		controlWrapper.add(controls);
-
-		return controlWrapper;
-	}
-
-	/**
-	 * Creates the {@link JMenuBar} for this {@link RenderFrame}.
-	 * 
-	 * @return the {@link JMenuBar} for this {@link RenderFrame}.
-	 */
-	private JMenuBar createMenuBar() {
-		JMenuBar bar = new JMenuBar();
-		bar.setPreferredSize(new Dimension(-1, 32));
-
-		JMenu fileMenu = new JMenu("File");
-		fileMenu.setMnemonic(KeyEvent.VK_F);
-
-		JMenuItem saveImage = new JMenuItem("Save image as...");
-		KeyStroke controlShiftS = KeyStroke.getKeyStroke("control shift S");
-		saveImage.setAccelerator(controlShiftS);
-
-		saveImage.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveImage();
-			}
-		});
-
-		JMenuItem close = new JMenuItem("Close");
-		KeyStroke controlQ = KeyStroke.getKeyStroke("control Q");
-		close.setAccelerator(controlQ);
-
-		close.addActionListener(new ActionListener() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * java.awt.event.ActionListener#actionPerformed(java.awt.event.
-			 * ActionEvent)
-			 */
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				RenderFrame.this.frame.dispose();
-			}
-		});
-
-		fileMenu.add(saveImage);
-		fileMenu.add(close);
-		bar.add(fileMenu);
-
-		return bar;
-	}
-
-	/**
-	 * 
-	 */
-	public void saveImage() {
-		JFileChooser chooser = new JFileChooser(new File("."));
-		chooser.setMultiSelectionEnabled(false);
-		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-		FileFilter imageFilter = new FileFilter() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see javax.swing.filechooser.FileFilter#getDescription()
-			 */
-			public String getDescription() {
-				return "image file (*.png, *.jpeg *.bmp *.gif)";
-			}
-
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
-			 */
-			@Override
-			public boolean accept(File f) {
-				String name = f.getName();
-
-				for (String extension : ImageIO.getWriterFileSuffixes())
-					if (name.endsWith(".".concat(extension)))
-						return true;
-				return false;
-			}
-		};
-
-		chooser.setFileFilter(imageFilter);
-
-		int returnValue = chooser.showSaveDialog(frame);
-
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			File file = chooser.getSelectedFile();
-
-			if (imageFilter.accept(file)) {
-				try {
-					String extension = file.getName();
-					extension = extension.substring(extension.lastIndexOf('.') + 1);
-					ImageIO.write(panel.getImage(), extension, file);
-				} catch (Exception exception) {
-					exception.printStackTrace();
-				}
-			} else {
-				StringBuilder builder = new StringBuilder("The given " + "filename:\n\n");
-				builder.append(file.getAbsolutePath());
-				builder.append(
-						"\n\ndoes not have a valid image " + "extension! " + "The supported image extensions are:\n");
-
-				for (String extension : ImageIO.getWriterFileSuffixes())
-					builder.append(" " + extension);
-
-				JOptionPane.showMessageDialog(frame, builder.toString());
-			}
-		}
-	}
-
-	/**
-	 * Sets the value of the progress bar.
-	 * 
-	 * @param progress
-	 *            value for the progress bar (between 0 and 1).
-	 */
-	public void setProgress(double progress) {
-		bar.setValue(Math.max(0, Math.min(100, (int) (100.0 * progress))));
-	}
-
-	/**
-	 * Centers this {@link RenderFrame} on the first monitor encountered.
+	 * Centers this frame on the first monitor encountered.
 	 */
 	public void center() {
-		GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsEnvironment environment = GraphicsEnvironment
+				.getLocalGraphicsEnvironment();
 
 		GraphicsDevice[] devices = environment.getScreenDevices();
-
 		if (devices.length == 0)
 			return;
 		center(devices[0]);
 	}
 
 	/**
-	 * Centers this {@link RenderFrame} on the given graphics device.
+	 * Centers this frame on the given graphics device.
 	 * 
 	 * @param device
 	 *            the device to center this {@link RenderFrame} on.
@@ -424,14 +146,26 @@ public class RenderFrame implements ProgressListener {
 	 */
 	public void center(GraphicsDevice device) throws NullPointerException {
 		if (device == null)
-			throw new NullPointerException("the graphics device to center this image frame upon!");
+			throw new NullPointerException(
+					"the graphics device to center this image frame upon!");
 
 		Rectangle r = device.getDefaultConfiguration().getBounds();
 
-		int x = (r.width - frame.getWidth()) / 2;
-		int y = (r.height - frame.getHeight()) / 2;
+		int x = r.x + (r.width - getWidth()) / 2;
+		int y = r.y + (r.height - getHeight()) / 2;
 
-		frame.setLocation(x, y);
+		setLocation(x, y);
+	}
+
+	/**
+	 * Sets the value of the progress bar. The given value must be in the
+	 * interval [0,1] or are otherwise clamped to the interval.
+	 * 
+	 * @param progress
+	 *            value for the progress bar (between 0 and 1).
+	 */
+	private void setProgress(double progress) {
+		bar.setValue(Math.max(0, Math.min(100, (int) (100.0 * progress))));
 	}
 
 	/*
@@ -442,5 +176,185 @@ public class RenderFrame implements ProgressListener {
 	@Override
 	public void update(double progress) {
 		setProgress(progress);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gui.ProgressListener#finished()
+	 */
+	@Override
+	public void finished() {
+		setProgress(1.0);
+	}
+
+	/**
+	 * Opens a file dialog with the request to save the current image stored in
+	 * the frame buffer.
+	 */
+	public void save() {
+		JFileChooser chooser = new JFileChooser(".");
+		chooser.setMultiSelectionEnabled(false);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setFileFilter(new FileFilter() {
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see javax.swing.filechooser.FileFilter#getDescription()
+			 */
+			@Override
+			public String getDescription() {
+				return "Portable Network Graphics (*.png)";
+			}
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
+			 */
+			@Override
+			public boolean accept(File file) {
+				return file.isDirectory() || file.getName().endsWith(".png");
+			}
+		});
+
+		int result = chooser.showSaveDialog(this);
+
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			String filename = file.getName();
+
+			if (!filename.endsWith(".png")) {
+				JOptionPane.showMessageDialog(this,
+						"The chosen filename does not end with '.png'!",
+						"Invalid filename", JOptionPane.ERROR_MESSAGE);
+			} else {
+				try {
+					double sensitivity = panel.getSensitivity();
+					double gamma = panel.getGamma();
+					BufferedImage image = buffer.toBufferedImage(sensitivity,
+							gamma);
+					ImageIO.write(image, "png", file);
+				} catch (IOException e) {
+					StringBuilder builder = new StringBuilder(e.toString());
+					for (StackTraceElement element : e.getStackTrace())
+						builder.append("\n\tat ").append(element);
+
+					JOptionPane.showMessageDialog(this, builder.toString(),
+							"IOException occured", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Creates a user interface which shows the progress of the render which is
+	 * stored in the given frame buffer. The progress will be visualized as an
+	 * image, tone mapped with the given sensitivity and gamma.
+	 * 
+	 * This method makes sure that all the components of the user interface are
+	 * created and started on the AWT event dispatching thread.
+	 * 
+	 * @param buffer
+	 *            the frame buffer which stores the rendered image.
+	 * @param gamma
+	 *            the gamma exponent to tone map the image with.
+	 * @param sensitivity
+	 *            the sensitivity to scale the image with.
+	 * @throws InvocationTargetException
+	 *             when an exception occurs during the construction of the
+	 *             graphical user interface.
+	 * @throws InterruptedException
+	 *             when an interruption occurs while we are waiting for the AWT
+	 *             event dispatching thread to schedule the thread which creates
+	 *             the graphical user interface.
+	 * @return a graphical user interface which shows the progress of the
+	 *         render.
+	 */
+	public static RenderFrame buildRenderFrame(FrameBuffer buffer,
+			double gamma, double sensitivity) throws InvocationTargetException,
+			InterruptedException {
+		RenderFrameThread thread = new RenderFrameThread(buffer, gamma,
+				sensitivity);
+		SwingUtilities.invokeAndWait(thread);
+		return thread.getRenderFrame();
+	}
+
+	/**
+	 * A class which allows us to construct the user interface in a separate
+	 * thread.
+	 * 
+	 * The Java Swing library requires us to build all the components of the
+	 * graphical user interface on the AWT event dispatching thread.
+	 * 
+	 * The run method of this class constructs the graphical user interface. To
+	 * create the user interface on the AWT event dispatching thread, an
+	 * instance of this class has to be run using
+	 * {@link SwingUtilities#invokeLater(Runnable)} or
+	 * {@link SwingUtilities#invokeAndWait(Runnable)}).
+	 * 
+	 * @author Niels Billen
+	 * @version 0.3
+	 */
+	private static class RenderFrameThread implements Runnable {
+		/**
+		 * Reference to the user interface which will be constructed in this
+		 * {@link Runnable#run()} method.
+		 */
+		private RenderFrame frame;
+
+		/**
+		 * The frame buffer to construct the user interface for.
+		 */
+		private final FrameBuffer buffer;
+
+		/**
+		 * The initial gamma value to display the render with.
+		 */
+		private final double gamma;
+
+		/**
+		 * The initial sensitivity value to display the render with.
+		 */
+		private final double sensitivity;
+
+		/**
+		 * Constructs a new runnable which builds a graphical user interface
+		 * which shows the progress of the render which is stored in the given
+		 * frame buffer. The progress will be visualized as an image, tone
+		 * mapped with the given sensitivity and gamma.
+		 * 
+		 * @param buffer
+		 *            the frame buffer which stores the rendered image.
+		 * @param gamma
+		 *            the gamma exponent to tone map the image with.
+		 * @param sensitivity
+		 *            the sensitivity to scale the image with.
+		 */
+		public RenderFrameThread(FrameBuffer buffer, double gamma,
+				double sensitivity) {
+			this.buffer = buffer;
+			this.gamma = gamma;
+			this.sensitivity = sensitivity;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Thread#run()
+		 */
+		@Override
+		public void run() {
+			frame = new RenderFrame(buffer, sensitivity, gamma);
+		}
+
+		/**
+		 * Returns the user interface which has been constructed by this thread.
+		 * 
+		 * @return the user interface which has been constructed by this thread.
+		 */
+		public RenderFrame getRenderFrame() {
+			return frame;
+		}
 	}
 }

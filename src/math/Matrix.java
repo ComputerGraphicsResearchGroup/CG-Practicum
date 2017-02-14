@@ -7,48 +7,37 @@ import java.util.Locale;
  * Implementation of a 4 x 4 matrix.
  * 
  * @author Niels Billen
- * @version 1.0
+ * @version 0.3
  */
-public class Matrix implements Cloneable {
+public class Matrix {
 	private final double[][] matrix = new double[4][4];
 
 	/**
-	 * Reference to the identity {@link Matrix}.
+	 * Reference to the identity matrix.
 	 */
 	// @formatter:off
 	public static final Matrix IDENTITY = new Matrix(
-										1, 0, 0, 0, 
-										0, 1, 0, 0, 
-										0, 0, 1, 0, 
-										0, 0, 0, 1);
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1);
 	// @formatter:on
 
 	/**
-	 * Creates a new {@link Matrix} filled with zeros.
+	 * Creates a new matrix filled with zeros.
 	 */
 	public Matrix() {
 	}
 
 	/**
-	 * Creates a new {@link Matrix} filled with the given value.
+	 * Creates a new matrix containing the given elements.
 	 * 
-	 * @param value
-	 *            the value to fill the {@link Matrix} with.
-	 */
-	public Matrix(double value) {
-		for (int i = 0; i < 4; ++i)
-			Arrays.fill(matrix[i], value);
-	}
-
-	/**
-	 * Creates a new {@link Matrix} containing the given elements.
-	 * 
-	 * The elements are put in the {@link Matrix} in row-major order (i.e. the
-	 * first 4 elements of <code>elements</code> correspond to the first row in
-	 * the {@link Matrix}.
+	 * The elements are put in the matrix in row-major order (i.e. the first 4
+	 * elements of <code>elements</code> correspond to the first row in the
+	 * matrix.
 	 * 
 	 * @param elements
-	 *            the elements to fill the {@link Matrix} with.
+	 *            the elements to fill the matrix with.
 	 * @throws NullPointerException
 	 *             when the given elements array is null.
 	 * @throws ArrayIndexOutOfBoundsException
@@ -61,28 +50,12 @@ public class Matrix implements Cloneable {
 	}
 
 	/**
-	 * Constructs a {@link Matrix} from the given double array.
-	 * 
-	 * @param data
-	 *            the data to populate the {@link Matrix} with.
-	 * @throws NullPointerException
-	 *             when the given data is null.
-	 * @throws ArrayIndexOutOfBoundsException
-	 *             when the size of the given data is smaller than a 4x4 array.
-	 */
-	public Matrix(double[][] data) throws NullPointerException,
-			ArrayIndexOutOfBoundsException {
-		for (int row = 0; row < 4; ++row)
-			matrix[row] = Arrays.copyOf(data[row], 4);
-	}
-
-	/**
-	 * Constructs a copy of the given {@link Matrix}.
+	 * Constructs a copy of the given matrix.
 	 * 
 	 * @param matrix
-	 *            the {@link Matrix} to copy.
+	 *            the matrix to copy.
 	 * @throws NullPointerException
-	 *             when the given {@link Matrix} is null.
+	 *             when the given matrix is null.
 	 */
 	public Matrix(Matrix matrix) throws NullPointerException {
 		for (int row = 0; row < 4; ++row)
@@ -127,11 +100,9 @@ public class Matrix implements Cloneable {
 	}
 
 	/**
-	 * Returns true when this {@link Matrix} is exactly equal to the identity
-	 * {@link Matrix}.
+	 * Returns true when this matrix is exactly equal to the identity matrix.
 	 * 
-	 * @return true when this {@link Matrix} is exactly equal to the identity
-	 *         {@link Matrix}.
+	 * @return true when this matrix is exactly equal to the identity matrix.
 	 */
 	public boolean isIdentity() {
 		for (int row = 0; row < 4; ++row)
@@ -144,15 +115,14 @@ public class Matrix implements Cloneable {
 	}
 
 	/**
-	 * Constructs the {@link Matrix} which is the sum of this {@link Matrix} and
-	 * the given {@link Matrix}.
+	 * Constructs the matrix which is the sum of this matrix and the given
+	 * matrix.
 	 * 
 	 * @param matrix
-	 *            the {@link Matrix} to add to this {@link Matrix}.
+	 *            the matrix to add to this matrix.
 	 * @throws NullPointerException
-	 *             when the given {@link Matrix} is null.
-	 * @return a {@link Matrix} which is the sum of this {@link Matrix} and the
-	 *         given {@link Matrix}.
+	 *             when the given matrix is null.
+	 * @return a matrix which is the sum of this matrix and the given matrix.
 	 */
 	public Matrix add(Matrix matrix) throws NullPointerException {
 		Matrix result = new Matrix();
@@ -164,15 +134,15 @@ public class Matrix implements Cloneable {
 	}
 
 	/**
-	 * Constructs the {@link Matrix} which is the difference of this
-	 * {@link Matrix} and the given {@link Matrix}.
+	 * Constructs the matrix which is the difference of this matrix and the
+	 * given matrix.
 	 * 
 	 * @param matrix
-	 *            the {@link Matrix} to subtract from this {@link Matrix}.
+	 *            the matrix to subtract from this matrix.
 	 * @throws NullPointerException
-	 *             when the given {@link Matrix} is null.
-	 * @return a {@link Matrix} which is the difference of this {@link Matrix}
-	 *         and the given {@link Matrix}.
+	 *             when the given matrix is null.
+	 * @return a matrix which is the difference of this matrix and the given
+	 *         matrix.
 	 */
 	public Matrix subtract(Matrix matrix) throws NullPointerException {
 		Matrix result = new Matrix();
@@ -184,13 +154,13 @@ public class Matrix implements Cloneable {
 	}
 
 	/**
-	 * Constructs the {@link Matrix} equal to this {@link Matrix} with all
-	 * elements multiplied by the given scalar.
+	 * Constructs the matrix equal to this matrix with all elements multiplied
+	 * by the given scalar.
 	 * 
 	 * @param scalar
 	 *            the scalar to multiply with.
-	 * @return a {@link Matrix} which is the multiplication of this
-	 *         {@link Matrix} and the given {@link Matrix}.
+	 * @return a matrix which is the multiplication of this matrix and the given
+	 *         matrix.
 	 */
 	public Matrix multiply(double scalar) {
 		Matrix result = new Matrix();
@@ -201,14 +171,14 @@ public class Matrix implements Cloneable {
 	}
 
 	/**
-	 * Constructs the {@link Matrix} which is the multiplication of this
-	 * {@link Matrix} with the given {@link Matrix}.
+	 * Constructs the matrix which is the multiplication of this matrix with the
+	 * given matrix.
 	 * 
 	 * @param matrix
-	 *            the {@link Matrix} to multiply this {@link Matrix} with.
+	 *            the matrix to multiply this matrix with.
 	 * @throws NullPointerException
-	 *             when the given {@link Matrix} is null.
-	 * @return this {@link Matrix} multiplied with this {@link Matrix}.
+	 *             when the given matrix is null.
+	 * @return this matrix multiplied with this matrix.
 	 */
 	public Matrix multiply(Matrix matrix) throws NullPointerException {
 		Matrix result = new Matrix();
@@ -223,35 +193,9 @@ public class Matrix implements Cloneable {
 	}
 
 	/**
-	 * Returns an array which is the multiplication of this {@link Matrix} and
-	 * the given array.
+	 * Returns the transpose of this matrix.
 	 * 
-	 * @param array
-	 *            the array to be multiplied by this {@link Matrix}.
-	 * @throws NullPointerException
-	 *             when the given array is null.
-	 * @throws IllegalArgumentException
-	 *             when the length of the array does not match the number of
-	 *             columns of this matrix.
-	 * @return an array which is the multiplication of this {@link Matrix} and
-	 *         the given array.
-	 */
-	public double[] multiply(double[] array) throws NullPointerException,
-			IllegalArgumentException {
-		if (array.length != 4)
-			throw new IllegalArgumentException("the length of the array does "
-					+ "not match the number of columns of this matrix!");
-		double[] result = new double[] { 0, 0, 0, 0 };
-		for (int i = 0; i < 4; ++i)
-			for (int k = 0; k < 4; ++k)
-				result[i] += get(i, k) * array[k];
-		return result;
-	}
-
-	/**
-	 * Returns the transpose of this {@link Matrix}.
-	 * 
-	 * @return the transpose of this {@link Matrix}.
+	 * @return the transpose of this matrix.
 	 */
 	public Matrix transpose() {
 		Matrix result = new Matrix();
@@ -262,63 +206,77 @@ public class Matrix implements Cloneable {
 	}
 
 	/**
-	 * Transforms the given {@link Point} using this {@link Matrix}.
+	 * Transforms the given point by this matrix.
 	 * 
 	 * @param point
-	 *            the {@link Point} to transform.
+	 *            the point to transform.
 	 * @throws NullPointerException
-	 *             when the given {@link Point} is null.
-	 * @return the given {@link Point} transformed by this {@link Matrix}.
+	 *             when the given point is null.
+	 * @return the given point transformed by this matrix.
 	 */
 	public Point transform(Point point) throws NullPointerException {
-		double[] homogenous = point.toHomogenousArray();
-		double[] transformed = multiply(homogenous);
-		return new Point(transformed[0], transformed[1], transformed[2],
-				transformed[3]);
+		// @formatter:off
+		double x = get(0, 0) * point.x + get(0, 1) * point.y +
+				   get(0, 2) * point.z + get(0, 3);
+		double y = get(1, 0) * point.x + get(1, 1) * point.y +
+				   get(1, 2) * point.z + get(1, 3);
+		double z = get(2, 0) * point.x + get(2, 1) * point.y +
+				   get(2, 2) * point.z + get(2, 3);
+		double w = get(3, 0) * point.x + get(3, 1) * point.y + 
+				   get(3, 2) * point.z + get(3, 3);
+		double invW = 1.0 / w;
+		// @formatter:on
+
+		return new Point(x * invW, y * invW, z * invW);
 	}
 
 	/**
-	 * Transforms the given {@link Vector} using this {@link Matrix}.
+	 * Transforms the given vector by this matrix.
 	 * 
 	 * @param vector
-	 *            the {@link Vector} to transform.
+	 *            the point to transform.
 	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
-	 * @return the given {@link Vector} transformed by this {@link Matrix}.
+	 *             when the given point is null.
+	 * @return the given point transformed by this matrix.
 	 */
 	public Vector transform(Vector vector) throws NullPointerException {
-		double[] v = new double[3];
-		for (int row = 0; row < 3; ++row)
-			for (int column = 0; column < 3; ++column)
-				v[row] += get(row, column) * vector.get(column);
-		return new Vector(v[0], v[1], v[2]);
-	}
+		// @formatter:off
+		double x = get(0, 0) * vector.x + get(0, 1) * vector.y +
+				   get(0, 2) * vector.z;
+		double y = get(1, 0) * vector.x + get(1, 1) * vector.y +
+				   get(1, 2) * vector.z;
+		double z = get(2, 0) * vector.x + get(2, 1) * vector.y +
+				   get(2, 2) * vector.z;
+		// @formatter:on
 
-	/**
-	 * Returns this {@link Matrix} as a two dimensional array.
-	 * 
-	 * The resulting array is not backed by this {@link Matrix} so changes to
-	 * the resulting array will not be reflected in this {@link Matrix} and vice
-	 * versa.
-	 * 
-	 * @return this {@link Matrix} as a two dimensional array.
-	 */
-	public double[][] toArray() {
-		double[][] result = new double[4][4];
-
-		for (int row = 0; row < 4; ++row)
-			result[row] = Arrays.copyOf(matrix[row], 4);
-		return result;
+		return new Vector(x, y, z);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#clone()
+	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return new Matrix(this);
+	public int hashCode() {
+		return Arrays.hashCode(matrix);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Matrix other = (Matrix) obj;
+		return Arrays.equals(matrix, other.matrix);
 	}
 
 	/*

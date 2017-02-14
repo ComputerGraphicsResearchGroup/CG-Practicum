@@ -7,33 +7,33 @@ import java.util.Locale;
  * Vector implementation in three dimensions.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
-public class Vector implements Cloneable, Comparable<Vector> {
+public class Vector implements Comparable<Vector> {
 	/**
-	 * x coordinate of this {@link Vector}.
+	 * x coordinate of this vector.
 	 */
 	public final double x;
 
 	/**
-	 * y coordinate of this {@link Vector}.
+	 * y coordinate of this vector.
 	 */
 	public final double y;
 
 	/**
-	 * z coordinate of this {@link Vector}.
+	 * z coordinate of this vector.
 	 */
 	public final double z;
 
 	/**
-	 * Creates a {@link Vector} at the origin.
+	 * Creates a vector at the origin.
 	 */
 	public Vector() {
 		this(0, 0, 0);
 	}
 
 	/**
-	 * Creates a new {@link Vector} at the given position.
+	 * Creates a new vector at the given position.
 	 * 
 	 * @param x
 	 *            the x coordinate.
@@ -49,45 +49,13 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	}
 
 	/**
-	 * Creates a new {@link Vector} at the given position, scaled by the given
-	 * homogeneous coordinate.
-	 * 
-	 * @param x
-	 *            the x coordinate.
-	 * @param y
-	 *            the y coordinate.
-	 * @param z
-	 *            the z coordinate.
-	 * @param w
-	 *            the homogeneous coordinate.
-	 */
-	public Vector(double x, double y, double z, double w) {
-		double inv_w = 1.0 / w;
-		this.x = x * inv_w;
-		this.y = y * inv_w;
-		this.z = z * inv_w;
-	}
-
-	/**
-	 * Creates a copy of the given {@link Vector}.
-	 * 
-	 * @param vector
-	 *            the {@link Vector} to copy.
-	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
-	 */
-	public Vector(Vector vector) throws NullPointerException {
-		this(vector.x, vector.y, vector.z);
-	}
-
-	/**
-	 * Returns the coordinate of this {@link Vector} along the given axis.
+	 * Returns the coordinate of this vector along the given axis.
 	 * 
 	 * @param axis
 	 *            axis to retrieve the coordinate of (0=x, 1=y, 2=z axis).
 	 * @throws IllegalArgumentException
 	 *             when the given axis is smaller than zero or larger than two.
-	 * @return the coordinate of this {@link Vector} along the given axis.
+	 * @return the coordinate of this vector along the given axis.
 	 */
 	public double get(int axis) throws IllegalArgumentException {
 		switch (axis) {
@@ -104,8 +72,8 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	}
 
 	/**
-	 * Constructs a {@link Vector} equal to this {@link Vector} translated by
-	 * the given coordinates.
+	 * Constructs a vector equal to this vector translated by the given
+	 * coordinates.
 	 * 
 	 * @param x
 	 *            the x coordinate.
@@ -113,31 +81,30 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	 *            the y coordinate.
 	 * @param z
 	 *            the z coordinate.
-	 * @return a new {@link Vector} which is equal to this {@link Vector}
-	 *         translated by the given coordinates.
+	 * @return a new vector which is equal to this vector translated by the
+	 *         given coordinates.
 	 */
 	public Vector add(double x, double y, double z) {
 		return new Vector(this.x + x, this.y + y, this.z + z);
 	}
 
 	/**
-	 * Constructs a {@link Vector} equal to this {@link Vector} translated by
-	 * the given {@link Vector}.
+	 * Constructs a vector equal to this vector translated by the given vector.
 	 * 
 	 * @param vector
-	 *            the {@link Vector} to add to this {@link Vector}.
+	 *            the vector to add to this vector.
 	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
-	 * @return a new {@link Vector} which is equal to this {@link Vector}
-	 *         translated by the given {@link Vector} .
+	 *             when the given vector is null.
+	 * @return a new vector which is equal to this vector translated by the
+	 *         given vector .
 	 */
 	public Vector add(Vector vector) throws NullPointerException {
 		return add(vector.x, vector.y, vector.z);
 	}
 
 	/**
-	 * Constructs the {@link Vector} spanned between this {@link Vector} and the
-	 * given coordinates.
+	 * Constructs the vector spanned between this vector and the given
+	 * coordinates.
 	 * 
 	 * @param x
 	 *            the x coordinate.
@@ -145,63 +112,61 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	 *            the y coordinate.
 	 * @param z
 	 *            the z coordinate.
-	 * @return a new {@link Vector} equal to the {@link Vector} spanned between
-	 *         this {@link Vector} and the given coordinates.
+	 * @return a new vector equal to the vector spanned between this vector and
+	 *         the given coordinates.
 	 */
 	public Vector subtract(double x, double y, double z) {
 		return new Vector(this.x - x, this.y - y, this.z - z);
 	}
 
 	/**
-	 * Constructs the {@link Vector} spanned between this {@link Vector} and the
-	 * given {@link Vector}.
+	 * Constructs the vector spanned between this vector and the given vector.
 	 * 
 	 * @param vector
-	 *            the {@link Vector} to subtract from this {@link Vector}.
+	 *            the vector to subtract from this vector.
 	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
-	 * @return a new {@link Vector} equal to the {@link Vector} spanned between
-	 *         this {@link Vector} and the given {@link Vector}.
+	 *             when the given vector is null.
+	 * @return a new vector equal to the vector spanned between this vector and
+	 *         the given vector.
 	 */
 	public Vector subtract(Vector vector) throws NullPointerException {
 		return subtract(vector.x, vector.y, vector.z);
 	}
 
 	/**
-	 * Constructs the {@link Vector} equal to this {@link Vector} with its
-	 * coordinates scaled by the given scalar.
+	 * Constructs the vector equal to this vector with its coordinates scaled by
+	 * the given scalar.
 	 * 
 	 * @param scalar
-	 *            the scalar to scale this {@link Vector} with.
-	 * @return a new {@link Vector} equal to this {@link Vector} with its
-	 *         coordinates scaled by the given scalar.
+	 *            the scalar to scale this vector with.
+	 * @return a new vector equal to this vector with its coordinates scaled by
+	 *         the given scalar.
 	 */
 	public Vector scale(double scalar) {
 		return new Vector(x * scalar, y * scalar, z * scalar);
 	}
 
 	/**
-	 * Constructs the {@link Vector} equal to this {@link Vector} with its
-	 * coordinates divided by the given divisor.
+	 * Constructs the vector equal to this vector with its coordinates divided
+	 * by the given divisor.
 	 * 
 	 * @param divisor
-	 *            the divisor to scale this {@link Vector} with.
-	 * @return a new {@link Vector} equal to this {@link Vector} with its
-	 *         coordinates divided by the given divisor.
+	 *            the divisor to scale this vector with.
+	 * @return a new vector equal to this vector with its coordinates divided by
+	 *         the given divisor.
 	 */
 	public Vector divide(double divisor) {
 		return scale(1.0 / divisor);
 	}
 
 	/**
-	 * Returns a comparator to sort {@link Vector} objects along the given axis.
+	 * Returns a comparator to sort vector objects along the given axis.
 	 * 
 	 * @param axis
-	 *            the axis to sort the {@link Vector}s along.
+	 *            the axis to sort the vectors along.
 	 * @throws IllegalArgumentException
 	 *             when the given axis is smaller than zero or larger than two.
-	 * @return a comparator to sort objects of {@link Vector} along the given
-	 *         axis.
+	 * @return a comparator to sort objects of vector along the given axis.
 	 */
 	public Comparator<Vector> getComparator(final int axis)
 			throws IllegalArgumentException {
@@ -219,50 +184,26 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	}
 
 	/**
-	 * Converts this {@link Vector} to a three dimensional array.
-	 * 
-	 * @return this {@link Vector} as a three dimensional array.
-	 */
-	public double[] toArray() {
-		return new double[] { x, y, z };
-	}
-
-	/**
-	 * Returns this {@link Vector} as a four dimensional array with the fourth
-	 * coordinate being the homogeneous coordinate.
-	 * 
-	 * @return this {@link Vector} as a four dimensional array with the fourth
-	 *         coordinate being the homogeneous coordinate.
-	 */
-	public double[] toHomogenousArray() {
-		return new double[] { x, y, z, 0.0 };
-	}
-
-	/**
-	 * Returns the dot product of this {@link Vector} with the given
-	 * {@link Vector}.
+	 * Returns the dot product of this vector with the given vector.
 	 * 
 	 * @param vector
-	 *            the {@link Vector} to calculate the dot product with.
+	 *            the vector to calculate the dot product with.
 	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
-	 * @return the dot product of this {@link Vector} with the given
-	 *         {@link Vector}.
+	 *             when the given vector is null.
+	 * @return the dot product of this vector with the given vector.
 	 */
 	public double dot(Vector vector) throws NullPointerException {
 		return x * vector.x + y * vector.y + z * vector.z;
 	}
 
 	/**
-	 * Returns the cross product of this {@link Vector} with the given
-	 * {@link Vector}.
+	 * Returns the cross product of this vector with the given vector.
 	 * 
 	 * @param vector
-	 *            the {@link Vector} to calculate the cross product of.
+	 *            the vector to calculate the cross product of.
 	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
-	 * @return the cross product of this {@link Vector} with the given
-	 *         {@link Vector}.
+	 *             when the given vector is null.
+	 * @return the cross product of this vector with the given vector.
 	 */
 	public Vector cross(Vector vector) throws NullPointerException {
 		double xx = y * vector.z - z * vector.y;
@@ -273,49 +214,86 @@ public class Vector implements Cloneable, Comparable<Vector> {
 	}
 
 	/**
-	 * Returns the squared length of this {@link Vector}.
+	 * Returns the squared length of this vector.
 	 * 
-	 * @return the squared length of this {@link Vector}.
+	 * @return the squared length of this vector.
 	 */
 	public double lengthSquared() {
 		return x * x + y * y + z * z;
 	}
 
 	/**
-	 * Returns the length of this {@link Vector}.
+	 * Returns the length of this vector.
 	 * 
-	 * @return the length of this {@link Vector}.
+	 * @return the length of this vector.
 	 */
 	public double length() {
 		return Math.sqrt(lengthSquared());
 	}
 
 	/**
-	 * Converts this {@link Vector} to a {@link Point}.
+	 * Converts this vector to a point.
 	 * 
-	 * @return this {@link Vector} as a {@link Point}.
+	 * @return this vector as a point.
 	 */
 	public Point toPoint() {
 		return new Point(x, y, z);
 	}
 
 	/**
-	 * Returns a normalized version of this {@link Vector}.
+	 * Returns a normalized version of this vector.
 	 * 
-	 * @return a normalized version of this {@link Vector}.
+	 * @return a normalized version of this vector.
 	 */
 	public Vector normalize() {
 		return divide(length());
 	}
 
+	/**
+	 * Returns the inverse of this vector.
+	 * 
+	 * @return the inverse of this vector.
+	 */
+	public Vector invert() {
+		return new Vector(-x, -y, -z);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#clone()
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return new Vector(this);
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Vector))
+			return false;
+		Vector v = (Vector) obj;
+
+		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(v.x))
+			return false;
+		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(v.y))
+			return false;
+		if (Double.doubleToLongBits(z) != Double.doubleToLongBits(v.z))
+			return false;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		int result = 1;
+		long temp = Double.doubleToLongBits(x);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z);
+		return 31 * result + (int) (temp ^ (temp >>> 32));
 	}
 
 	/*

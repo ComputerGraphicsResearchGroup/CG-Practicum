@@ -1,23 +1,31 @@
 package math;
 
 /**
- * Represents a {@link Transformation} to transform three dimensional objects.
+ * A wrapper for transformation matrix which allows to apply transformation and
+ * inverse transformation on three-dimensional objects.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
-public class Transformation implements Cloneable {
+public class Transformation {
+	/**
+	 * The transformation matrix.
+	 */
 	private final Matrix matrix;
+
+	/**
+	 * The inverse of the transformation matrix.
+	 */
 	private final Matrix inverse;
 
 	/**
-	 * Reference to the identity {@link Transformation}.
+	 * Reference to the identity transformation.
 	 */
 	public static final Transformation IDENTITY = new Transformation(
 			Matrix.IDENTITY, Matrix.IDENTITY);
 
 	/**
-	 * Creates a new {@link Transformation} for three dimensional objects.
+	 * Creates a new transformation for three dimensional objects.
 	 * 
 	 * @param matrix
 	 *            the matrix transformation.
@@ -30,128 +38,111 @@ public class Transformation implements Cloneable {
 	}
 
 	/**
-	 * Creates a copy of the given {@link Transformation}.
+	 * Returns the matrix containing the transformation.
 	 * 
-	 * @param transformation
-	 *            the {@link Transformation} to copy.
-	 * @throws NullPointerException
-	 *             when the given {@link Transformation} is null.
-	 */
-	public Transformation(Transformation transformation)
-			throws NullPointerException {
-		this.matrix = transformation.matrix;
-		this.inverse = transformation.inverse;
-	}
-
-	/**
-	 * Returns the {@link Matrix} containing the transformation.
-	 * 
-	 * @return the {@link Matrix} containing the transformation.
+	 * @return the matrix containing the transformation.
 	 */
 	public Matrix getTransformationMatrix() {
 		return matrix;
 	}
 
 	/**
-	 * Returns the inverse of the {@link Matrix} containing the transformation.
+	 * Returns the inverse of the matrix containing the transformation.
 	 * 
-	 * @return the inverse of the {@link Matrix} containing the transformation.
+	 * @return the inverse of the matrix containing the transformation.
 	 */
 	public Matrix getInverseTransformationMatrix() {
 		return inverse;
 	}
 
 	/**
-	 * Returns the inverse of this {@link Transformation}.
+	 * Returns the inverse of this transformation.
 	 * 
-	 * @return the inverse of this {@link Transformation}.
+	 * @return the inverse of this transformation.
 	 */
 	public Transformation invert() {
 		return new Transformation(inverse, matrix);
 	}
 
 	/**
-	 * Appends the given {@link Transformation} to this {@link Transformation}.
+	 * Appends the given transformation to this transformation.
 	 * 
 	 * @param transformation
-	 *            the {@link Transformation} to append.
+	 *            the transformation to append.
 	 * @throws NullPointerException
-	 *             when the given {@link Transformation} is null.
-	 * @return this {@link Transformation} concatenated with the given
-	 *         {@link Transformation}.
+	 *             when the given transformation is null.
+	 * @return this transformation concatenated with the given transformation.
 	 */
 	public Transformation append(Transformation transformation)
 			throws NullPointerException {
+		if (transformation == null)
+			throw new NullPointerException("the given transformation is null!");
 		return new Transformation(matrix.multiply(transformation.matrix),
 				transformation.inverse.multiply(inverse));
 	}
 
 	/**
-	 * Transforms the given {@link Point} with this {@link Transformation}.
+	 * Transforms the given point with this transformation.
 	 * 
 	 * @param point
-	 *            the {@link Point} to transform.
+	 *            the point to transform.
 	 * @throws NullPointerException
-	 *             when the given {@link Point} is null.
-	 * @return the given {@link Point} transformed by this
-	 *         {@link Transformation}.
+	 *             when the given point is null.
+	 * @return the given point transformed by this transformation.
 	 */
 	public Point transform(Point point) throws NullPointerException {
 		return matrix.transform(point);
 	}
 
 	/**
-	 * Transforms the given {@link Point} with the inverse of this
-	 * {@link Transformation}.
+	 * Transforms the given point with the inverse of this transformation.
 	 * 
 	 * @param point
-	 *            the {@link Point} to transform.
+	 *            the point to transform.
 	 * @throws NullPointerException
-	 *             when the given {@link Point} is null.
-	 * @return the given {@link Point} transformed by the inverse of this
-	 *         {@link Transformation}.
+	 *             when the given point is null.
+	 * @return the given point transformed by the inverse of this
+	 *         transformation.
 	 */
 	public Point transformInverse(Point point) throws NullPointerException {
 		return inverse.transform(point);
 	}
 
 	/**
-	 * Transforms the given {@link Vector} with this {@link Transformation}.
+	 * Transforms the given vector with this transformation.
 	 * 
 	 * @param vector
-	 *            the {@link Vector} to transform.
+	 *            the vector to transform.
 	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
-	 * @return the given {@link Vector} transformed by this
-	 *         {@link Transformation}.
+	 *             when the given vector is null.
+	 * @return the given vector transformed by this transformation.
 	 */
 	public Vector transform(Vector vector) throws NullPointerException {
 		return matrix.transform(vector);
 	}
 
 	/**
-	 * Transforms the given {@link Vector} with the inverse of this
-	 * {@link Transformation}.
+	 * Transforms the given vector with the inverse of this transformation.
 	 * 
 	 * @param vector
-	 *            the {@link Vector} to transform.
+	 *            the vector to transform.
 	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
-	 * @return the given {@link Vector} transformed by the inverse of this
-	 *         {@link Transformation}.
+	 *             when the given vector is null.
+	 * @return the given vector transformed by the inverse of this
+	 *         transformation.
 	 */
 	public Vector transformInverse(Vector vector) throws NullPointerException {
 		return inverse.transform(vector);
 	}
 
 	/**
-	 * Transforms the given {@link Ray} with this {@link Transformation}.
+	 * Transforms the given ray with this transformation.
 	 * 
 	 * @param ray
-	 *            the {@link Ray} to transform.
+	 *            the ray to transform.
 	 * @throws NullPointerException
-	 *             when the given {@link Ray} is null.
-	 * @return the given {@link Ray} transformed by this {@link Transformation}.
+	 *             when the given ray is null.
+	 * @return the given ray Ray} transformed by this transformation.
 	 */
 	public Ray transform(Ray ray) throws NullPointerException {
 		Point point = transform(ray.origin);
@@ -160,15 +151,13 @@ public class Transformation implements Cloneable {
 	}
 
 	/**
-	 * Transforms the given {@link Ray} with the inverse of this
-	 * {@link Transformation}.
+	 * Transforms the given ray with the inverse of this transformation.
 	 * 
 	 * @param ray
-	 *            the {@link Ray} to transform.
+	 *            the ray to transform.
 	 * @throws NullPointerException
-	 *             when the given {@link Ray} is null.
-	 * @return the given {@link Ray} transformed by the inverse of this
-	 *         {@link Transformation}.
+	 *             when the given ray is null.
+	 * @return the given ray transformed by the inverse of this transformation.
 	 */
 	public Ray transformInverse(Ray ray) throws NullPointerException {
 		Point point = transformInverse(ray.origin);
@@ -177,24 +166,15 @@ public class Transformation implements Cloneable {
 	}
 
 	/**
-	 * Returns the identity {@link Transformation}.
-	 * 
-	 * @return the identity {@link Transformation}.
-	 */
-	public static Transformation createIdentity() {
-		return IDENTITY;
-	}
-
-	/**
-	 * Creates a new translation {@link Transformation}.
+	 * Creates a new translation transformation.
 	 * 
 	 * @param x
-	 *            the x translation for this {@link Transformation}.
+	 *            the x translation for this transformation.
 	 * @param y
-	 *            the y translation for this {@link Transformation}.
+	 *            the y translation for this transformation.
 	 * @param z
-	 *            the z translation for this {@link Transformation}.
-	 * @return a new translation {@link Transformation}.
+	 *            the z translation for this transformation.
+	 * @return a new translation transformation.
 	 */
 	public static Transformation translate(double x, double y, double z) {
 		// @formatter:off
@@ -211,16 +191,15 @@ public class Transformation implements Cloneable {
 	}
 
 	/**
-	 * Creates a new scale {@link Transformation}.
+	 * Creates a new scale transformation.
 	 * 
 	 * @param x
-	 *            the x scale for this scale {@link Transformation}.
+	 *            the x scale for this scale transformation.
 	 * @param y
-	 *            the y scale for this scale {@link Transformation}.
+	 *            the y scale for this scale transformation.
 	 * @param z
-	 *            the z scale for this scale {@link Transformation}.
-	 * @return a new {@link Transformation} which scales three dimensional
-	 *         objects.
+	 *            the z scale for this scale transformation.
+	 * @return a new transformation which scales three dimensional objects.
 	 */
 	public static Transformation scale(double x, double y, double z) {
 		// @formatter:off
@@ -237,12 +216,12 @@ public class Transformation implements Cloneable {
 	}
 
 	/**
-	 * Creates a new rotation {@link Transformation} about the x axis in a
-	 * counter clockwise direction.
+	 * Creates a new rotation transformation about the x axis in a counter
+	 * clockwise direction.
 	 * 
 	 * @param angle
 	 *            the angle to rotate about (in degrees).
-	 * @return a new rotation {@link Transformation} about the x axis.
+	 * @return a new rotation transformation about the x axis.
 	 */
 	public static Transformation rotateX(double angle) {
 		double rad = Math.toRadians(angle);
@@ -260,12 +239,12 @@ public class Transformation implements Cloneable {
 	}
 
 	/**
-	 * Creates a new rotation {@link Transformation} about the y axis in a
-	 * counter clockwise direction.
+	 * Creates a new rotation transformation about the y axis in a counter
+	 * clockwise direction.
 	 * 
 	 * @param angle
 	 *            the angle to rotate about (in degrees).
-	 * @return a new rotation {@link Transformation} about the y axis.
+	 * @return a new rotation transformation about the y axis.
 	 */
 	public static Transformation rotateY(double angle) {
 		double rad = Math.toRadians(angle);
@@ -283,12 +262,12 @@ public class Transformation implements Cloneable {
 	}
 
 	/**
-	 * Creates a new rotation {@link Transformation} about the z axis in a
-	 * counter clockwise direction.
+	 * Creates a new rotation transformation about the z axis in a counter
+	 * clockwise direction.
 	 * 
 	 * @param angle
 	 *            the angle to rotate about (in degrees).
-	 * @return a new rotation {@link Transformation} about the z axis.
+	 * @return a new rotation transformation about the z axis.
 	 */
 	public static Transformation rotateZ(double angle) {
 		double rad = Math.toRadians(angle);
@@ -305,14 +284,73 @@ public class Transformation implements Cloneable {
 		return new Transformation(transformation, inverse);
 	}
 
+	/**
+	 * Creates a rotation around of the given angle around the specified
+	 * rotation axis.
+	 * 
+	 * @param vector
+	 *            the vector to rotate about.
+	 * @param angle
+	 *            the angle to rotate about (in degrees).
+	 * @return a new rotation transformation about the z axis.
+	 */
+	public static Transformation rotate(Vector vector, double angle) {
+		if (vector == null)
+			throw new NullPointerException("the given vector is null!");
+		double length = vector.length();
+		if (length == 0)
+			throw new IllegalArgumentException(
+					"the given vector is degenerate (length is zero)!");
+		Vector n = vector.divide(length);
+
+		double rad = Math.toRadians(angle);
+		double sin = Math.sin(rad);
+		double cos = Math.cos(rad);
+		double ncos = 1.0 - cos;
+
+		// @formatter:off
+		Matrix transformation = new Matrix(	
+				n.x * n.x * ncos + cos,
+					n.y * n.x * ncos - n.z * sin,
+					n.z * n.x * ncos + n.y * sin, 0,
+				n.x * n.y * ncos + n.z * sin,
+					n.y * n.y * ncos + cos,
+					n.z * n.y * ncos - n.x * sin, 0,
+				n.x * n.z * ncos - n.y * sin,
+					n.y * n.z * ncos + n.x * sin,
+					n.z * n.z * ncos + cos, 0,
+				0, 0, 0, 1);
+		Matrix inverse = transformation.transpose();
+		
+		// @formatter:on
+		return new Transformation(transformation, inverse);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see java.lang.Object#clone()
+	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return new Transformation(this);
+	public int hashCode() {
+		return getTransformationMatrix().hashCode();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Transformation t = (Transformation) obj;
+		return getTransformationMatrix().equals(t.getTransformationMatrix());
 	}
 
 	/*
@@ -322,7 +360,7 @@ public class Transformation implements Cloneable {
 	 */
 	@Override
 	public String toString() {
-		return new StringBuilder("[").append(getClass().getName()+"]\n").append(
-				matrix.toString()).toString();
+		return new StringBuilder("[").append(getClass().getName() + "]\n")
+				.append(matrix.toString()).toString();
 	}
 }

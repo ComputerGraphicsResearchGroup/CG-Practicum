@@ -7,30 +7,54 @@ import math.Vector;
 import sampling.Sample;
 
 /**
- * Implementation of a perspective {@link Camera}.
+ * Implementation of a perspective camera.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
 public class PerspectiveCamera implements Camera {
+	/**
+	 * The origin of the camera.
+	 */
 	private final Point origin;
+
+	/**
+	 * An orthonormal basis which spans the local coordinate system of the
+	 * camera.
+	 */
 	private final OrthonormalBasis basis;
 
+	/**
+	 * The width of the image plane in three-dimensional space.
+	 */
 	private final double width;
+
+	/**
+	 * The height of the image plane in three-dimensional space.
+	 */
 	private final double height;
+
+	/**
+	 * The inverse of the horizontal resolution of the image to be rendered.
+	 */
 	private final double invxResolution;
+
+	/**
+	 * The inverse of the vertical resolution of the image to be rendered.
+	 */
 	private final double invyResolution;
 
 	/**
-	 * Creates a new {@link PerspectiveCamera} for an image with the given
-	 * resolution, at the given position, looking into the given direction with
-	 * the given up vector as the up direction. The field of view parameter
-	 * specifies the horizontal field of view in degrees.
+	 * Creates a new perspective camera for an image with the given resolution,
+	 * at the given position, looking into the given direction with the given up
+	 * vector as the up direction. The field of view parameter specifies the
+	 * horizontal field of view in degrees.
 	 * 
 	 * @param xResolution
-	 *            x resolution of the image this camera is for.
+	 *            the horizontal pixel resolution of the image this camera is
+	 *            for.
 	 * @param yResolution
-	 *            y resolution of the image this camera is for.
+	 *            the vertical pixel resolution of the image this camera is for.
 	 * @param origin
 	 *            origin of the camera.
 	 * @param lookat
@@ -67,7 +91,7 @@ public class PerspectiveCamera implements Camera {
 					+ "larger than or equal to 180 degrees!");
 
 		this.origin = origin;
-		this.basis = new OrthonormalBasis(lookat, up);
+		this.basis = new OrthonormalBasis(lookat.invert(), up);
 
 		invxResolution = 1.0 / (double) xResolution;
 		invyResolution = 1.0 / (double) yResolution;
@@ -76,10 +100,10 @@ public class PerspectiveCamera implements Camera {
 	}
 
 	/**
-	 * Creates a new {@link PerspectiveCamera} for an image with the given
-	 * resolution, looking from the given origin to the given destination with
-	 * the given up vector as the up direction. The field of view parameter
-	 * specifies the horizontal field of view in degrees.
+	 * Creates a new perspective camera for an image with the given resolution,
+	 * looking from the given origin to the given destination with the given up
+	 * vector as the up direction. The field of view parameter specifies the
+	 * horizontal field of view in degrees.
 	 * 
 	 * @param xResolution
 	 *            x resolution of the image this camera is for.
@@ -120,7 +144,8 @@ public class PerspectiveCamera implements Camera {
 		double u = width * (sample.x * invxResolution - 0.5);
 		double v = height * (sample.y * invyResolution - 0.5);
 
-		Vector direction = basis.w.add(basis.u.scale(u).add(basis.v.scale(v)));
+		Vector direction = basis.u.scale(u).add(basis.v.scale(v))
+				.subtract(basis.w);
 
 		return new Ray(origin, direction);
 	}

@@ -14,15 +14,37 @@ import java.util.concurrent.locks.ReentrantLock;
  * character to return to the head of the current output line.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
 public class ProgressReporter {
-	private final String title;
+	/**
+	 * Title of the task.
+	 */
+	private final String taskName;
+
+	/**
+	 * Length of the progress bar.
+	 */
 	private final int barLength;
+
+	/**
+	 * The total amount of work units that have to be completed.
+	 */
 	private final int totalWork;
+
+	/**
+	 * The number of work units which have been completed.
+	 */
 	private int done = 0;
+
+	/**
+	 * Whether output has to be displayed.
+	 */
 	private boolean quiet;
 
+	/**
+	 * 
+	 */
 	private long startTime = System.currentTimeMillis();
 	private ReentrantLock lock = new ReentrantLock();
 	private Set<ProgressListener> listeners = new HashSet<ProgressListener>();
@@ -31,10 +53,9 @@ public class ProgressReporter {
 	private int maximumPrintLength = 0;
 
 	/**
-	 * Creates a new {@link ProgressReporter} for a task with the given amount
-	 * of work. If the {@link ProgressReporter} is not quiet, a progress bar is
-	 * drawn leading with the given title followed by an ASCII progress bar of
-	 * the given size.
+	 * Creates a new progress reporter for a task with the given amount of work.
+	 * If the progress reporter is not quiet, a progress bar is drawn leading
+	 * with the given title followed by an ASCII progress bar of the given size.
 	 * 
 	 * @param title
 	 *            title for the progress bar.
@@ -43,28 +64,24 @@ public class ProgressReporter {
 	 * @param totalWork
 	 *            total amount of work which needs to be done.
 	 * @param quiet
-	 *            whether the {@link ProgressReporter} should print or not.
+	 *            whether the progress reportershould print or not.
 	 */
 	public ProgressReporter(String title, int barLength, int totalWork,
 			boolean quiet) {
-		this.title = title;
+		this.taskName = title;
 		this.barLength = barLength;
 		this.totalWork = totalWork;
 		this.quiet = quiet;
-
-		// initialize the spaces string
-		for (int i = 0; i < barLength; ++i)
-			spaces = spaces.concat(" ");
 	}
 
 	/**
-	 * Adds the given {@link ProgressListener} to this {@link ProgressReporter}.
+	 * Adds the given listener to this progress reporter.
 	 * 
-	 * When {@link ProgressReporter#update(int)} is called, all
-	 * {@link ProgressListener}s will be notified of the progress.
+	 * When {@link ProgressReporter#update(int)} is called, all listeners will
+	 * be notified of the progress.
 	 * 
 	 * @param listener
-	 *            the listener to add to this {@link ProgressReporter}.
+	 *            the listener to add to this progress reporter.
 	 */
 	public void addProgressListener(ProgressListener listener) {
 		if (listener != null)
@@ -72,8 +89,7 @@ public class ProgressReporter {
 	}
 
 	/**
-	 * Removes the given {@link ProgressListener} from this
-	 * {@link ProgressReporter}.
+	 * Removes the given {@link ProgressListener} from this progress reporter.
 	 * 
 	 * @param listener
 	 *            the listener to remove.
@@ -83,7 +99,20 @@ public class ProgressReporter {
 	}
 
 	/**
-	 * Updates this {@link ProgressReporter} with the given amount of work.
+	 * Starts the timer for the progress reporter.
+	 */
+	public void start() {
+		done = 0;
+		plusses = "";
+		startTime = System.currentTimeMillis();
+
+		// initialize the spaces string
+		for (int i = 0; i < barLength; ++i)
+			spaces = spaces.concat(" ");
+	}
+
+	/**
+	 * Updates this progress reporter with the given amount of work.
 	 * 
 	 * @param work
 	 *            the amount of work which is done.
@@ -114,7 +143,7 @@ public class ProgressReporter {
 			}
 
 			// print the progress bar
-			System.out.format("\r%s [%s%s] ", title, plusses, spaces);
+			System.out.format("\r%s [%s%s] ", taskName, plusses, spaces);
 
 			// calculate the time
 			long time = System.currentTimeMillis() - startTime;
@@ -137,21 +166,21 @@ public class ProgressReporter {
 	}
 
 	/**
-	 * Indicates to this {@link ProgressReporter} that the work is done.
+	 * Indicates to this progress reporter that the work is done.
 	 */
 	public void done() {
 		lock.lock();
 		done = totalWork;
 
 		for (ProgressListener listener : listeners)
-			listener.update(1);
+			listener.finished();
 
 		if (!quiet) {
 			if (plusses.length() != barLength)
 				for (int i = plusses.length(); i != barLength; ++i)
 					plusses = plusses.concat("+");
 
-			System.out.format("\r%s [%s] ", title, plusses);
+			System.out.format("\r%s [%s] ", taskName, plusses);
 
 			// print the time string.
 			String timeString = String.format(Locale.ENGLISH, "(%.2fs)",

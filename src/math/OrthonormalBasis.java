@@ -3,8 +3,8 @@ package math;
 import java.util.Locale;
 
 /**
- * Represents a basis in three dimensions consisting of three orthogonal
- * {@link Vector}s of unit length.
+ * Represents a basis in three dimensions consisting of three orthogonal vectors
+ * of unit length.
  * 
  * @author Niels Billen
  * @version 1.0
@@ -26,21 +26,29 @@ public class OrthonormalBasis implements Cloneable {
 	public final Vector w;
 
 	/**
-	 * Creates an orthonormal basis around the given {@link Vector}.
+	 * Creates an orthonormal basis around the given vector.
 	 * 
-	 * The <code>w</code> {@link Vector} of this {@link OrthonormalBasis} basis
-	 * will point in the same direction as the given {@link Vector}
-	 * <code>a</code>.
+	 * The <code>w</code> vector of this orthonormal basis basis will point in
+	 * the same direction as the given vector <code>a</code>.
 	 * 
 	 * @param a
-	 *            {@link Vector} to construct the orthonormal basis about. The
-	 *            <code>w</code> {@link Vector} of this {@link OrthonormalBasis}
-	 *            will point in the direction of this parameter.
+	 *            vector to construct the orthonormal basis about. The
+	 *            <code>w</code> vector of this orthonormal basis will point in
+	 *            the direction of this parameter.
 	 * @throws NullPointerException
-	 *             when the given {@link Vector} is null.
+	 *             when the given vector is null.
+	 * @throws IllegalArgumentException
+	 *             when the length of the given vector is zero.
 	 */
 	public OrthonormalBasis(Vector a) throws NullPointerException {
-		w = a.normalize();
+		if (a == null)
+			throw new NullPointerException("the given vector is null!");
+		double length = a.length();
+
+		if (length == 0)
+			throw new IllegalArgumentException(
+					"the given vector has zero length!");
+		w = a.divide(length);
 
 		if (w.x > w.y) {
 			double inv_length = 1.0 / Math.sqrt(w.x * w.x + w.z * w.z);
@@ -53,43 +61,55 @@ public class OrthonormalBasis implements Cloneable {
 	}
 
 	/**
-	 * Creates an orthonormal basis from the two given {@link Vector}s.
+	 * Creates an orthonormal basis from the two given vectors.
 	 * 
-	 * The <code>w</code> {@link Vector} of this {@link OrthonormalBasis} basis
-	 * will point in the same direction as the given {@link Vector}
-	 * <code>a</code>. The constructor tries to force the <code>v</code>
-	 * {@link Vector} of this {@link OrthonormalBasis} to point roughly in the
-	 * same direction as the given <code>b</code> {@link Vector}.
+	 * The <code>w</code> vector of this orthonormal basis basis will point in
+	 * the same direction as the given vector <code>a</code>. The constructor
+	 * tries to force the <code>v</code> vector of this orthonormal basis to
+	 * point roughly in the same direction as the given <code>b</code> vector.
 	 * 
 	 * @param a
-	 *            the first {@link Vector}. The <code>w</code> {@link Vector} of
-	 *            this {@link OrthonormalBasis} basis will point in the same
-	 *            direction as the given {@link Vector} <code>a</code>.
+	 *            the first vector. The <code>w</code> vector of this
+	 *            orthonormal basis basis will point in the same direction as
+	 *            the given vector <code>a</code>.
 	 * @param b
-	 *            the second {@link Vector}. The <code>v</code> {@link Vector}
-	 *            will point roughly in the same direction as the given
-	 *            {@link Vector}.
+	 *            the second vector. The <code>v</code> vector will point
+	 *            roughly in the same direction as the given vector.
 	 * @throws NullPointerException
 	 *             when one of the two vectors is null.
+	 * @throws IllegalArgumentException
+	 *             when the two given vectors are colinear.
 	 */
-	public OrthonormalBasis(Vector a, Vector b) throws NullPointerException {
-		if (Math.abs(a.normalize().dot(b.normalize())) > 1.f - 1e-9f) {
+	public OrthonormalBasis(Vector a, Vector b) throws NullPointerException,
+			IllegalArgumentException {
+		if (a == null)
+			throw new NullPointerException("the first vector is null!");
+		if (b == null)
+			throw new NullPointerException("the sceond vector is null!");
+
+		Vector cross = b.cross(a);
+		double length = cross.length();
+
+		if (length == 0) {
+			throw new IllegalArgumentException("the vectors are colinear!");
+		} else if (length < 1e-8) {
 			System.err.println("Warning: vector a and b are nearly colinear");
 			System.err.println(a);
 			System.err.println(b);
 		}
+
 		w = a.normalize();
-		u = b.cross(w).normalize();
+		u = cross.divide(length);
 		v = w.cross(u);
 	}
 
 	/**
-	 * Constructs a copy of the given {@link OrthonormalBasis}.
+	 * Constructs a copy of the given orthonormal basis.
 	 * 
 	 * @param basis
-	 *            the {@link OrthonormalBasis} to copy.
+	 *            the orthonormal basis to copy.
 	 * @throws NullPointerException
-	 *             when the given {@link OrthonormalBasis} is null.
+	 *             when the given orthonormal basis is null.
 	 */
 	public OrthonormalBasis(OrthonormalBasis basis) throws NullPointerException {
 		this.u = basis.u;
@@ -114,8 +134,10 @@ public class OrthonormalBasis implements Cloneable {
 	 */
 	@Override
 	public String toString() {
+		//@formatter:off
 		return String.format(Locale.ENGLISH,
-				"[%s %s %s]\n[%s %s %s]\n[%s %s %s]", u.x, u.y, u.z, v.x, v.y,
-				v.z, w.x, w.y, w.z);
+				"[%s %s %s]\n[%s %s %s]\n[%s %s %s]",
+				u.x, u.y, u.z, v.x, v.y, v.z, w.x, w.y, w.z);
+		//@formatter: on
 	}
 }

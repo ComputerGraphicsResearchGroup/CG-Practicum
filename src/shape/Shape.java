@@ -3,19 +3,19 @@ package shape;
 import math.Ray;
 
 /**
- * Interface which should be implemented by all {@link Shape}s.
+ * Interface which should be implemented by all shapes.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
 public interface Shape {
 	/**
-	 * Returns whether the given {@link Ray} intersects this {@link Shape}.
-	 * False when the given ray is null.
+	 * Returns whether the given ray intersects this shape. Returns false when
+	 * the given ray is null.
 	 * 
 	 * @param ray
-	 *            the {@link Ray} to intersect with.
-	 * @return true when the given {@link Ray} intersects this {@link Shape}.
+	 *            the ray to intersect with.
+	 * @return true when the given ray intersects this shape.
 	 */
 	public boolean intersect(Ray ray);
 }

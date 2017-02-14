@@ -5,27 +5,31 @@ import math.Transformation;
 import math.Vector;
 
 /**
- * Represents a three-dimensional {@link Sphere} with radius one and centered at
- * the origin, which is transformed by the given {@link Transformation}.
+ * Represents a three-dimensional sphere with radius one, centered at the
+ * origin, which is transformed by a transformation.
  * 
  * @author Niels Billen
- * @version 0.2
+ * @version 0.3
  */
 public class Sphere implements Shape {
+	/**
+	 * The transformation which is applied to the sphere to place it in the
+	 * scene.
+	 */
 	public final Transformation transformation;
 
 	/**
-	 * Creates a new unit {@link Sphere} at the origin, transformed by the given
-	 * {@link Transformation}.
+	 * Creates a new unit sphere at the origin, transformed by the given
+	 * transformation.
 	 * 
 	 * @param transformation
-	 *            the transformation applied to this {@link Sphere}.
+	 *            the transformation applied to this sphere.
 	 * @throws NullPointerException
 	 *             when the transformation is null.
 	 */
-	public Sphere(Transformation transformation) {
+	public Sphere(Transformation transformation) throws NullPointerException {
 		if (transformation == null)
-			throw new NullPointerException("the given origin is null!");
+			throw new NullPointerException("the given transformation is null!");
 		this.transformation = transformation;
 	}
 
@@ -36,11 +40,13 @@ public class Sphere implements Shape {
 	 */
 	@Override
 	public boolean intersect(Ray ray) {
+		if (ray == null)
+			return false;
 		Ray transformed = transformation.transformInverse(ray);
 
 		Vector o = transformed.origin.toVector();
 
-		double a = transformed.direction.dot(transformed.direction);
+		double a = transformed.direction.lengthSquared();
 		double b = 2.0 * (transformed.direction.dot(o));
 		double c = o.dot(o) - 1.0;
 

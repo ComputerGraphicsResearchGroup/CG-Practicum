@@ -15,4 +15,9 @@ public interface ProgressListener {
 	 *            the amount of progress on a task (between 0 and 1).
 	 */
 	public void update(double progress);
+
+	/**
+	 * Called when a task has been finished.
+	 */
+	public void finished();
 }
