@@ -50,7 +50,7 @@ public class OrthonormalBasis implements Cloneable {
 					"the given vector has zero length!");
 		w = a.divide(length);
 
-		if (w.x > w.y) {
+		if (Math.abs(w.x) > Math.abs(w.y)) {
 			double inv_length = 1.0 / Math.sqrt(w.x * w.x + w.z * w.z);
 			u = new Vector(-w.z * inv_length, 0.0, w.x * inv_length);
 		} else {
