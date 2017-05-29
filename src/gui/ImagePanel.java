@@ -563,9 +563,11 @@ public class ImagePanel extends JPanel implements ComponentListener,
 		int x = (int) ((currentMousePosition.getX() - getDrawX()) * invZoom);
 		int y = (int) ((currentMousePosition.getY() - getDrawY()) * invZoom);
 
-		if (x >= 0 && x < buffer.xResolution && y >= 0
-				&& y < buffer.yResolution && finished[y][x]) {
-			RGBSpectrum spectrum = buffer.getPixel(x, y).getSpectrum();
+		int yy = buffer.yResolution - y - 1;
+		
+		if (x >= 0 && x < buffer.xResolution && yy >= 0
+				&& yy < buffer.yResolution && finished[yy][x]) {
+			RGBSpectrum spectrum = buffer.getPixel(x, yy).getSpectrum();
 
 			for (ImagePanelListener listener : listeners)
 				listener.spectrumAtMouseChanged(spectrum);
