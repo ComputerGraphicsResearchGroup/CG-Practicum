@@ -9,3 +9,7 @@ Course [Computer Graphics: Project (B-KUL-H07Z5A)](https://onderwijsaanbod.kuleu
 The *optional* starting code base of a ray tracing engine for the course [Computer Graphics: Project (B-KUL-H07Z5A)](https://onderwijsaanbod.kuleuven.be/syllabi/n/H07Z5AN.htm#activetab=doelstellingen_idp1405792).
 
 <p align="center"><img src="res/Example.jpg" width="700"></p>
+
+## Note
+
+Currently and past enrolled students are **not** allowed to have a public fork of this repository!
