@@ -23,10 +23,11 @@ import film.RGBSpectrum;
  * A panel which allows the user to control the gamma and sensitivity of the
  * image shown in the image panel.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	Niels Billen, Matthias Moulin
+ * @version 0.3.1
  */
 public class ControlPanel extends JPanel {
+	
 	/**
 	 * A unique id required for serialization (required by the Serializable
 	 * interface which JPanel implements).
@@ -250,7 +251,7 @@ public class ControlPanel extends JPanel {
 
 		// Create the tick labels
 		Hashtable<Integer, JLabel> gammaLabels = new Hashtable<Integer, JLabel>();
-		gammaLabels.put(1, new JLabel("0.1", JLabel.CENTER));
+		gammaLabels.put( 1, new JLabel("0.1", JLabel.CENTER));
 		gammaLabels.put(10, new JLabel("1.0", JLabel.CENTER));
 		gammaLabels.put(20, new JLabel("2.0", JLabel.CENTER));
 		gammaLabels.put(30, new JLabel("3.0", JLabel.CENTER));
@@ -348,14 +349,14 @@ public class ControlPanel extends JPanel {
 		values.anchor = GridBagConstraints.LINE_END;
 
 		// Create the labels
-		JLabel redLabel = new JLabel("Red:");
+		JLabel redLabel   = new JLabel("Red:");
 		JLabel greenLabel = new JLabel("Green:");
-		JLabel blueLabel = new JLabel("Blue:");
+		JLabel blueLabel  = new JLabel("Blue:");
 
 		// Create the values
-		final JLabel red = new JLabel("? W/(m²sr)");
-		final JLabel green = new JLabel("? W/(m²sr)");
-		final JLabel blue = new JLabel("? W/(m²sr)");
+		final JLabel red   = new JLabel("<html>? W/(m<sup><small>2</small></sup>sr)</html>");
+		final JLabel green = new JLabel("<html>? W/(m<sup><small>2</small></sup>sr)</html>");
+		final JLabel blue  = new JLabel("<html>? W/(m<sup><small>2</small></sup>sr)</html>");
 
 		// Add the components
 		labels.gridy = 0;
@@ -391,17 +392,20 @@ public class ControlPanel extends JPanel {
 					@Override
 					public void run() {
 						if (s == null) {
-							String text = "? W/(m²sr)";
+							String text = "<html>? W/(m<sup><small>2</small></sup>sr)</html>";
 							red.setText(text);
 							green.setText(text);
 							blue.setText(text);
 						} else {
-							String redText = String
-									.format("%e W/(m²sr)", s.red);
-							String greenText = String.format("%e W/(m²sr)",
-									s.green);
-							String blueText = String.format("%e W/(m²sr)",
-									s.blue);
+							String redText  = String
+									.format("<html>%e W/(m<sup><small>2</small></sup>sr)</html>", 
+											s.red);
+							String greenText = String
+									.format("<html>%e W/(m<sup><small>2</small></sup>sr)</html>", 
+											s.green);
+							String blueText  = String
+									.format("<html>%e W/(m<sup><small>2</small></sup>sr)</html>", 
+											s.blue);
 							red.setText(redText);
 							green.setText(greenText);
 							blue.setText(blueText);
