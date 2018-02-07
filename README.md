@@ -1,4 +1,4 @@
-# CGPracticum
+# [CGPracticum](http://graphics.cs.kuleuven.be/courses/H07Z5a/opgave.html)
 
 ## About
 
