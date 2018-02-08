@@ -1,3 +1,11 @@
+[![Build status][s1]][tr] [![License][s2]][li]
+
+[s1]: https://travis-ci.org/ComputerGraphicsResearchGroup/CGPracticum.svg?branch=master
+[s2]: https://img.shields.io/badge/license-cgrg%201.0-blue.svg
+
+[tr]: https://travis-ci.org/ComputerGraphicsResearchGroup/CGPracticum
+[li]: https://raw.githubusercontent.com/ComputerGraphicsResearchGroup/CGPracticum/master/LICENSE.txt
+
 # [CGPracticum](http://graphics.cs.kuleuven.be/courses/H07Z5a/opgave.html)
 
 Course [Computer Graphics: Project (B-KUL-H07Z5A)](https://onderwijsaanbod.kuleuven.be/syllabi/n/H07Z5AN.htm#activetab=doelstellingen_idp1405792)
