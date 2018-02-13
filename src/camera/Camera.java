@@ -7,10 +7,11 @@ import sampling.Sample;
  * An interface which allows the generation of rays in a three-dimensional
  * space, corresponding to a sample in a two-dimensional image.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public interface Camera {
+	
 	/**
 	 * Generates a new ray from the given sample.
 	 * 

@@ -4,10 +4,11 @@ package sampling;
  * Encapsulates all the data necessary for a camera to generate rays on the
  * image plane.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Sample {
+	
 	/**
 	 * x coordinate of the sample in image space [0, horizontal resolution).
 	 */

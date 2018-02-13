@@ -12,10 +12,11 @@ import javax.swing.KeyStroke;
 /**
  * Implementation of the menu bar of the graphical user interface.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Menubar extends JMenuBar {
+	
 	/**
 	 * A unique id required for serialization (required by the Serializable
 	 * interface which JMenuBar implements).

@@ -13,10 +13,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * the command line. The progress bar is written on the same line using the \r
  * character to return to the head of the current output line.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class ProgressReporter {
+	
 	/**
 	 * Title of the task.
 	 */

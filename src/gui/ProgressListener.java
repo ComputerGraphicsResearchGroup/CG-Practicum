@@ -4,10 +4,11 @@ package gui;
  * A listener interface for all objects that which to listen to progress on a
  * computation task.
  * 
- * @author Niels Billen
- * @version 0.2
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public interface ProgressListener {
+	
 	/**
 	 * Called when a task has progressed up to the given percentage of progress.
 	 * 

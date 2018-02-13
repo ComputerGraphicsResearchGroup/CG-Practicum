@@ -4,10 +4,11 @@ package math;
  * A wrapper for transformation matrix which allows to apply transformation and
  * inverse transformation on three-dimensional objects.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Transformation {
+	
 	/**
 	 * The transformation matrix.
 	 */

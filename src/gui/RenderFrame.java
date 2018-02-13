@@ -24,10 +24,11 @@ import film.FrameBuffer;
 /**
  * A frame which display the progress of a render.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class RenderFrame extends JFrame implements ProgressListener {
+	
 	/**
 	 * A unique id required for serialization (required by the Serializable
 	 * interface which JFrame implements).

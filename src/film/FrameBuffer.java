@@ -8,10 +8,11 @@ import java.util.Collection;
 /**
  * A wrapper for a two-dimensional array of pixels.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class FrameBuffer {
+	
 	/**
 	 * Two-dimensional array of pixels. The pixels are stored in row order. When
 	 * iterating over the pixels, one should first iterate over the y

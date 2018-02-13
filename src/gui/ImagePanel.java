@@ -36,11 +36,12 @@ import film.Tile;
 /**
  * A panel which shows the progress of the rendered image.
  * 
- * @author Niels Billen
- * @version 0.1
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class ImagePanel extends JPanel implements ComponentListener,
 		MouseMotionListener, MouseListener, MouseWheelListener {
+			
 	/**
 	 * A unique id required for serialization (required by the Serializable
 	 * interface which JPanel implements).

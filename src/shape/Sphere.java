@@ -8,10 +8,11 @@ import math.Vector;
  * Represents a three-dimensional sphere with radius one, centered at the
  * origin, which is transformed by a transformation.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Sphere implements Shape {
+	
 	/**
 	 * The transformation which is applied to the sphere to place it in the
 	 * scene.

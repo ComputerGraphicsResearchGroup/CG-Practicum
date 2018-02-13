@@ -6,10 +6,11 @@ import java.util.Locale;
 /**
  * A position in three-dimensional space.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Point implements Comparable<Point> {
+	
 	/**
 	 * x coordinate of this point.
 	 */

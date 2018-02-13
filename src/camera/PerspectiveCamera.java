@@ -9,10 +9,11 @@ import sampling.Sample;
 /**
  * Implementation of a perspective camera.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class PerspectiveCamera implements Camera {
+	
 	/**
 	 * The origin of the camera.
 	 */

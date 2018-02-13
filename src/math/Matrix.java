@@ -6,10 +6,11 @@ import java.util.Locale;
 /**
  * Implementation of a 4 x 4 matrix.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Matrix {
+	
 	private final double[][] matrix = new double[4][4];
 
 	/**

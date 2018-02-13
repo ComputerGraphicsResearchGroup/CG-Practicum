@@ -5,10 +5,11 @@ import java.util.Locale;
 /**
  * A spectrum storing a red, green and color component with radiance as unit.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class RGBSpectrum {
+	
 	/**
 	 * A black spectrum.
 	 */

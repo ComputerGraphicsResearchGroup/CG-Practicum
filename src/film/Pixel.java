@@ -5,10 +5,11 @@ import java.util.Locale;
 /**
  * A pixel which stores a weighted sum of spectra.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Pixel {
+	
 	/**
 	 * The sum of all the spectra.
 	 */

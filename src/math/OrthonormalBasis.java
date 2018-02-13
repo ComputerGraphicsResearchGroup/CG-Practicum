@@ -6,10 +6,11 @@ import java.util.Locale;
  * Represents a basis in three dimensions consisting of three orthogonal vectors
  * of unit length.
  * 
- * @author Niels Billen
- * @version 1.0
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class OrthonormalBasis implements Cloneable {
+	
 	/**
 	 * First vector spanning the orthonormal basis.
 	 */

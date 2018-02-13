@@ -5,10 +5,11 @@ import film.RGBSpectrum;
 /**
  * A listener which is called when the mouse has moved in the image.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public interface ImagePanelListener {
+	
 	/**
 	 * Called when the spectrum at the mouse position has changed.
 	 * 

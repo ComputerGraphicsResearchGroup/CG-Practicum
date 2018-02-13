@@ -28,10 +28,11 @@ import gui.RenderFrame;
 /**
  * Entry point of your renderer.
  * 
- * @author Niels Billen
- * @version 1.0
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Renderer {
+	
 	/**
 	 * Entry point of your renderer.
 	 * 

@@ -23,8 +23,8 @@ import film.RGBSpectrum;
  * A panel which allows the user to control the gamma and sensitivity of the
  * image shown in the image panel.
  * 
- * @author 	Niels Billen, Matthias Moulin
- * @version 0.3.1
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class ControlPanel extends JPanel {
 	

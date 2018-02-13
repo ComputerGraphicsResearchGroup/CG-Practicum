@@ -4,10 +4,11 @@ package math;
  * Represents an ray in three dimensional space starting at a given point and
  * extending infinitely in a given direction.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Ray implements Cloneable {
+	
 	/**
 	 * The origin of the ray.
 	 */

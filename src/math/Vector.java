@@ -6,10 +6,11 @@ import java.util.Locale;
 /**
  * Vector implementation in three dimensions.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Vector implements Comparable<Vector> {
+	
 	/**
 	 * x coordinate of this vector.
 	 */

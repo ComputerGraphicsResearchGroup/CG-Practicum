@@ -7,10 +7,11 @@ import java.util.List;
 /**
  * A rectangular tile.
  * 
- * @author Niels Billen
- * @version 0.3
+ * @author 	CGRG
+ * @version 4.0.0
  */
 public class Tile {
+	
 	/**
 	 * The horizontal starting coordinate of this tile (inclusive).
 	 */
