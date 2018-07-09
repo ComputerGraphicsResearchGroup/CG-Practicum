@@ -6,7 +6,7 @@
 [tr]: https://travis-ci.org/ComputerGraphicsResearchGroup/CGPracticum
 [li]: https://raw.githubusercontent.com/ComputerGraphicsResearchGroup/CGPracticum/master/LICENSE.md
 
-# [CGPracticum](http://graphics.cs.kuleuven.be/courses/H07Z5a/opgave.html)
+# [CG-Practicum](http://graphics.cs.kuleuven.be/courses/H07Z5a/opgave.html)
 
 Course [Computer Graphics: Project (B-KUL-H07Z5A)](https://onderwijsaanbod.kuleuven.be/syllabi/n/H07Z5AN.htm#activetab=doelstellingen_idp1405792)
 
