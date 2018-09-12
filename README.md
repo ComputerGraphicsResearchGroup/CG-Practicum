@@ -1,6 +1,6 @@
 [![Build status][s1]][tr] [![License][s2]][li]
 
-[s1]: https://travis-ci.org/ComputerGraphicsResearchGroup/CGPracticum.svg?branch=master
+[s1]: https://travis-ci.org/ComputerGraphicsResearchGroup/CG-Practicum.svg?branch=master
 [s2]: https://img.shields.io/badge/license-CGRG%201.0-blue.svg
 
 [tr]: https://travis-ci.org/ComputerGraphicsResearchGroup/CGPracticum
