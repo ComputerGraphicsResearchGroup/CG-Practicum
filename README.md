@@ -1,11 +1,11 @@
 [![Build status][s1]][tr] [![Code Quality][s2]][co] [![License][s3]][li]
 
 [s1]: https://travis-ci.org/ComputerGraphicsResearchGroup/CG-Practicum.svg?branch=master
-[s2]: https://api.codacy.com/project/badge/Grade/b017fab838b74a3c833b61592126cd49
+[s2]: https://api.codacy.com/project/badge/Grade/149c5d5bcc2b48179900654badebf655
 [s3]: https://img.shields.io/badge/license-CGRG%201.0-blue.svg
 
 [tr]: https://travis-ci.org/ComputerGraphicsResearchGroup/CG-Practicum
-[co]: https://www.codacy.com/app/matt77hias/cs-smallpt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=matt77hias/cs-smallpt&amp;utm_campaign=Badge_Grade
+[co]: https://www.codacy.com/app/matt77hias/CG-Practicum?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ComputerGraphicsResearchGroup/CG-Practicum&amp;utm_campaign=Badge_Grade
 [li]: https://raw.githubusercontent.com/ComputerGraphicsResearchGroup/CG-Practicum/master/LICENSE.md
 
 # [CG-Practicum](http://graphics.cs.kuleuven.be/courses/H07Z5a/opgave.html)
