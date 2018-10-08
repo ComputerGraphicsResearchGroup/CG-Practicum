@@ -3,8 +3,8 @@
 [s1]: https://travis-ci.org/ComputerGraphicsResearchGroup/CG-Practicum.svg?branch=master
 [s2]: https://img.shields.io/badge/license-CGRG%201.0-blue.svg
 
-[tr]: https://travis-ci.org/ComputerGraphicsResearchGroup/CGPracticum
-[li]: https://raw.githubusercontent.com/ComputerGraphicsResearchGroup/CGPracticum/master/LICENSE.md
+[tr]: https://travis-ci.org/ComputerGraphicsResearchGroup/CG-Practicum
+[li]: https://raw.githubusercontent.com/ComputerGraphicsResearchGroup/CG-Practicum/master/LICENSE.md
 
 # [CG-Practicum](http://graphics.cs.kuleuven.be/courses/H07Z5a/opgave.html)
 
