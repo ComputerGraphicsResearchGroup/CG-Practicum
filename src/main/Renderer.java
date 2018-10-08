@@ -65,36 +65,36 @@ public class Renderer {
 				try {
 					if (flag.equals("-width"))
 						width = Integer.parseInt(arguments[++i]);
-					else if (flag.equals("-height"))
+					else if ("-height".equals(flag))
 						height = Integer.parseInt(arguments[++i]);
-					else if (flag.equals("-gui"))
+					else if ("-gui".equals(flag))
 						gui = Boolean.parseBoolean(arguments[++i]);
-					else if (flag.equals("-quiet"))
+					else if ("-quiet".equals(flag))
 						quiet = Boolean.parseBoolean(arguments[++i]);
-					else if (flag.equals("-sensitivity"))
+					else if ("-sensitivity".equals(flag))
 						sensitivity = Double.parseDouble(arguments[++i]);
-					else if (flag.equals("-gamma"))
+					else if ("-gamma".equals(flag))
 						gamma = Double.parseDouble(arguments[++i]);
-					else if (flag.equals("-origin")) {
+					else if ("-origin".equals(flag)) {
 						double x = Double.parseDouble(arguments[++i]);
 						double y = Double.parseDouble(arguments[++i]);
 						double z = Double.parseDouble(arguments[++i]);
 						origin = new Point(x, y, z);
-					} else if (flag.equals("-destination")) {
+					} else if ("-destination".equals(flag)) {
 						double x = Double.parseDouble(arguments[++i]);
 						double y = Double.parseDouble(arguments[++i]);
 						double z = Double.parseDouble(arguments[++i]);
 						destination = new Point(x, y, z);
-					} else if (flag.equals("-lookup")) {
+					} else if ("-lookup".equals(flag)) {
 						double x = Double.parseDouble(arguments[++i]);
 						double y = Double.parseDouble(arguments[++i]);
 						double z = Double.parseDouble(arguments[++i]);
 						lookup = new Vector(x, y, z);
-					} else if (flag.equals("-fov")) {
+					} else if ("-fov".equals(flag)) {
 						fov = Double.parseDouble(arguments[++i]);
-					} else if (flag.equals("-output")) {
+					} else if ("-output".equals(flag)) {
 						filename = arguments[++i];
-					} else if (flag.equals("-help")) {
+					} else if ("-help".equals(flag)) {
 						System.out
 								.println("usage: java -jar cgpracticum.jar\n"
 										+ "  -width <integer>      width of the image\n"
