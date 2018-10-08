@@ -1,9 +1,11 @@
-[![Build status][s1]][tr] [![License][s2]][li]
+[![Build status][s1]][tr] [![Code Quality][s2]][co] [![License][s3]][li]
 
 [s1]: https://travis-ci.org/ComputerGraphicsResearchGroup/CG-Practicum.svg?branch=master
-[s2]: https://img.shields.io/badge/license-CGRG%201.0-blue.svg
+[s2]: https://api.codacy.com/project/badge/Grade/b017fab838b74a3c833b61592126cd49
+[s3]: https://img.shields.io/badge/license-CGRG%201.0-blue.svg
 
 [tr]: https://travis-ci.org/ComputerGraphicsResearchGroup/CG-Practicum
+[co]: https://www.codacy.com/app/matt77hias/cs-smallpt?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=matt77hias/cs-smallpt&amp;utm_campaign=Badge_Grade
 [li]: https://raw.githubusercontent.com/ComputerGraphicsResearchGroup/CG-Practicum/master/LICENSE.md
 
 # [CG-Practicum](http://graphics.cs.kuleuven.be/courses/H07Z5a/opgave.html)
