@@ -684,6 +684,7 @@ public class ImagePanel extends JPanel implements ComponentListener,
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		// no-op
 	}
 
 	/*
@@ -693,6 +694,7 @@ public class ImagePanel extends JPanel implements ComponentListener,
 	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
+		// no-op
 	}
 
 	/*
@@ -703,6 +705,7 @@ public class ImagePanel extends JPanel implements ComponentListener,
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		// no-op
 	}
 
 	/*
@@ -712,6 +715,7 @@ public class ImagePanel extends JPanel implements ComponentListener,
 	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		// no-op
 	}
 
 	/*
