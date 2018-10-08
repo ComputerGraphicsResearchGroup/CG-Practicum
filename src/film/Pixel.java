@@ -13,7 +13,7 @@ public class Pixel {
 	/**
 	 * The sum of all the spectra.
 	 */
-	private RGBSpectrum color = RGBSpectrum.BLACK;
+	private RGBSpectrum color;
 
 	/**
 	 * The sum of the weights.
@@ -24,6 +24,7 @@ public class Pixel {
 	 * Creates a new black pixel.
 	 */
 	public Pixel() {
+		this.color = RGBSpectrum.BLACK;
 	}
 
 	/**
