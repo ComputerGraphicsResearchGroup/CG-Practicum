@@ -63,7 +63,7 @@ public class Renderer {
 				String flag = arguments[i];
 
 				try {
-					if (flag.equals("-width"))
+					if ("-width".equals(flag))
 						width = Integer.parseInt(arguments[++i]);
 					else if ("-height".equals(flag))
 						height = Integer.parseInt(arguments[++i]);
