@@ -616,7 +616,7 @@ public class ImagePanel extends JPanel implements ComponentListener,
 	 */
 	@Override
 	public void componentMoved(ComponentEvent e) {
-
+		// no-op
 	}
 
 	/*
@@ -628,6 +628,7 @@ public class ImagePanel extends JPanel implements ComponentListener,
 	 */
 	@Override
 	public void componentShown(ComponentEvent e) {
+		// no-op
 	}
 
 	/*
@@ -638,6 +639,7 @@ public class ImagePanel extends JPanel implements ComponentListener,
 	 */
 	@Override
 	public void componentHidden(ComponentEvent e) {
+		// no-op
 	}
 
 	/*
