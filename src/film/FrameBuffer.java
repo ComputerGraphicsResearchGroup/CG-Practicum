@@ -68,7 +68,7 @@ public class FrameBuffer {
 	 * {@code
 	 * 		// good
 	 * 		for(int y = 0; y < yResolution; ++y)
-	 * 			for(int x = 0; x < yResolution; ++y)
+	 * 			for(int x = 0; x < xResolution; ++x)
 	 * 				// do stuff
 	 * 
 	 * 		// bad
