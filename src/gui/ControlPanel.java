@@ -71,6 +71,7 @@ public class ControlPanel extends JPanel {
 		JPanel sensitivityPanel = createSensitivity();
 		JPanel gammaPanel = createGamma();
 		JPanel radiancePanel = createRadiancePanel();
+		JPanel positionPanel = createPositionPanel();
 
 		// Specify the layout
 		GridBagLayout layout = new GridBagLayout();
@@ -94,6 +95,10 @@ public class ControlPanel extends JPanel {
 		// Add the radiance panel
 		c.gridy++;
 		add(radiancePanel, c);
+
+		// Add the position panel
+		c.gridy++;
+		add(positionPanel, c);
 
 		// Add glue
 		c.weighty = 1;
@@ -382,7 +387,7 @@ public class ControlPanel extends JPanel {
 			 * gui.ImagePanelListener#spectrumAtMouseChanged(film.RGBSpectrum)
 			 */
 			@Override
-			public void spectrumAtMouseChanged(final RGBSpectrum s) {
+			public void spectrumAtMouseChanged(int x, int y, final RGBSpectrum s) {
 				SwingUtilities.invokeLater(new Runnable() {
 					/*
 					 * (non-Javadoc)
@@ -422,6 +427,94 @@ public class ControlPanel extends JPanel {
 		// Set a tooltip
 		result.setToolTipText("The amount of radiance in the image "
 				+ "at the mouse position.");
+		return result;
+	}
+
+	private JPanel createPositionPanel() {
+		JPanel result = new JPanel();
+
+		// Specify the layout
+		GridBagLayout manager = new GridBagLayout();
+		result.setLayout(manager);
+
+		// Initialize the constraints
+		GridBagConstraints labels = new GridBagConstraints();
+		labels.weightx = 0;
+		labels.weighty = 1;
+		labels.gridx = 0;
+		labels.ipadx = 4;
+		labels.ipady = 4;
+		labels.anchor = GridBagConstraints.LINE_START;
+
+		GridBagConstraints values = new GridBagConstraints();
+		values.weightx = 1;
+		values.weighty = 1;
+		values.gridx = 1;
+		values.ipadx = 4;
+		values.ipady = 4;
+		values.anchor = GridBagConstraints.LINE_END;
+
+		// Create the labels
+		JLabel xLabel   = new JLabel("X:");
+		JLabel yLabel = new JLabel("Y:");
+
+		// Create the values
+		final JLabel x   = new JLabel("<html>? </html>");
+		final JLabel y = new JLabel("<html>? </html>");
+
+		// Add the components
+		labels.gridy = 0;
+		values.gridy = 0;
+		result.add(xLabel, labels);
+		result.add(x, values);
+
+		labels.gridy = 1;
+		values.gridy = 1;
+		result.add(yLabel, labels);
+		result.add(y, values);
+
+		panel.addListener(new ImagePanelListener() {
+			/*
+			 * (non-Javadoc)
+			 *
+			 * @see
+			 * gui.ImagePanelListener#spectrumAtMouseChanged(film.RGBSpectrum)
+			 */
+			@Override
+			public void spectrumAtMouseChanged(int xImg, int yImg, final RGBSpectrum s) {
+				SwingUtilities.invokeLater(new Runnable() {
+					/*
+					 * (non-Javadoc)
+					 *
+					 * @see java.lang.Runnable#run()
+					 */
+					@Override
+					public void run() {
+						if (s == null) {
+							String text = "<html>?</html>";
+							x.setText(text);
+							y.setText(text);
+						} else {
+							String xText  = String
+									.format("<html>%d</html>",
+											xImg);
+							String yText = String
+									.format("<html>%d</html>",
+											yImg);
+							x.setText(xText);
+							y.setText(yText);
+						}
+					}
+				});
+			}
+		});
+
+		// Add a titled border
+		TitledBorder border = BorderFactory.createTitledBorder("Position");
+		result.setBorder(border);
+
+		// Set a tooltip
+		result.setToolTipText("The position of the cursor in the image.");
 		return result;
 	}
 }
