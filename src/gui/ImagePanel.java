@@ -734,7 +734,7 @@ public class ImagePanel extends JPanel implements ComponentListener,
 		int yy = buffer.yResolution - y - 1;
 
 		for (ImagePanelListener listener : listeners)
-			listener.spectrumAtMouseChanged(x, yy,null);
+			listener.spectrumAtMouseChanged(x, yy, null);
 	}
 
 	/*
