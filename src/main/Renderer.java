@@ -52,7 +52,7 @@ public class Renderer {
 		Point destination = new Point(0, 0, -1);
 		Vector lookup = new Vector(0, 1, 0);
 		double fov = 90;
-		String filename = "output.png";
+		String filename = "output" + System.currentTimeMillis() + ".png";
 
 		/**********************************************************************
 		 * Parse the command line arguments
